@@ -39,7 +39,6 @@ class PledgeInfo:
         self.persons=[]
         if _type=='预告':
             #预告数据转换
-            #只转换了人的信息数据
             self.persons.append(Person(_pd.iloc[0][3],_pd.iloc[0][4],_pd.iloc[0][5]))
             if not pd.isna(_pd.iloc[0][6]):
                 _names=_pd.iloc[0][6].splitlines()
@@ -59,11 +58,8 @@ class PledgeInfo:
                 pass
             pass
             self.house_contract=_pd.iloc[0][1]
-            '''
-            #预告抵押数据转换 --未完成
-            self.certificates=_pd.iloc[0][7].splitlines()
-            self.contract=_pd.iloc[0][8]
-            '''
+            self.obligor=Person(_pd.iloc[0][9],_pd.iloc[0][10],_pd.iloc[0][11])
+            self.contract=_pd.iloc[0][12]
             self.type='预告抵押登记'
         
         else:
@@ -98,10 +94,9 @@ class PledgeInfo:
         pass
 
 
-#转换剪贴板数据
-def creatClipboardData(type=''):
-    plinfo=PledgeInfo(pd.read_clipboard(header=None,sep='	'),type)
-    return plinfo
+#转换剪贴板数据 返回DataForm
+def creatClipboardData():
+    return pd.read_clipboard(header=None,sep='	')
 
 #初始化网页page对象,返回page
 def initPage(port=9222):
@@ -199,7 +194,34 @@ def businessInput(plinfo,port=9222):
         return 1
     elif plinfo.type=='预告抵押登记':
         #预告业务界面
-        pass
+        tab.ele('@@text()=合同编号@@for:htbh').after('@placeholder:请输入合同编号').input(plinfo.house_contract)
+        #添加权利人信息
+        for per in plinfo.persons:
+            tab.ele('text:添加权利人').click()
+            tab.ele('@placeholder:请输入姓名').input(per.name)
+            tab.ele('@placeholder:请输入联系方式').input(per.phone)
+            tab.ele('@@placeholder:请选择证件种类').click()
+            tab.ele('tag=li@@class:el-select-dropdown__item@@text()=身份证').click()
+            tab.ele('@placeholder:请输入身份证号').input(per.IdCard)
+            _ele=tab.ele('text:确认')
+            _ele.click()
+            _ele.wait.hidden()
+        
+        #添加义务人
+        tab.ele('text:添加义务人').click()
+        dialog_title=tab.ele('@@class:el-dialog__header@@text():义务人信息')
+        dialog_title.after('@placeholder:请输入姓名').input(plinfo.obligor.name)
+        dialog_title.after('@placeholder:请输入联系方式').input(plinfo.obligor.phone)
+        #dialog_title.after('@@placeholder:请选择证件种类').input('营业执照')
+        dialog_title.after('@@placeholder:请选择证件种类').click()
+        tab.eles('tag=li@@class:el-select-dropdown__item@@text():营业执照')[-1].click()
+        dialog_title.after('@placeholder:请输入证件号').input(plinfo.obligor.IdCard)
+        _ele=dialog_title.after('text:确认')
+        _ele.click()
+        _ele.wait.hidden()
+
+        tab.ele('text:银行合同编号').after('@placeholder:请输入合同编号').input(plinfo.contract)
+        return 1
 
 
     #添加抵押人信息
@@ -245,3 +267,9 @@ def businessInput(plinfo,port=9222):
     return 1
 
 
+#print(PledgeInfo(creatClipboardData(),'预告'))
+#print(creatClipboardData().iloc[0][3])
+data=PledgeInfo(creatClipboardData(),'预告')
+newBusiness()
+selectBusinessType(data)
+businessInput(data)
