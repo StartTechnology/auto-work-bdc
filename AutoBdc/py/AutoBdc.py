@@ -96,7 +96,7 @@ class PledgeInfo:
 
 #转换剪贴板数据 返回DataForm
 def creatClipboardData():
-    return pd.read_clipboard(header=None,sep='	')
+    return pd.read_clipboard(header=None,dtype=str,sep='	')
 
 #初始化网页page对象,返回page
 def initPage(port=9222):
@@ -268,8 +268,10 @@ def businessInput(plinfo,port=9222):
 
 
 #print(PledgeInfo(creatClipboardData(),'预告'))
-#print(creatClipboardData().iloc[0][3])
+#print(creatClipboardData().iloc[0][11])
+'''
 data=PledgeInfo(creatClipboardData(),'预告')
 newBusiness()
 selectBusinessType(data)
 businessInput(data)
+'''
