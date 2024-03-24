@@ -1,0 +1,46 @@
+import win.ui;
+/*DSG{{*/
+mainForm = win.form(text="车贷自动OCR";right=959;bottom=591;acceptfiles=1;exmode="none")
+mainForm.add(
+button_OCR={cls="button";text="开始OCR";left=189;top=288;right=360;bottom=340;z=5};
+button_toExcel={cls="button";text="提取excel";left=541;top=288;right=727;bottom=342;z=6};
+edit_ImagePath={cls="edit";left=244;top=85;right=890;bottom=118;acceptfiles=1;autohscroll=false;autovscroll=false;db=1;dl=1;dr=1;dt=1;z=4};
+edit_UmiPath={cls="edit";left=244;top=18;right=886;bottom=51;acceptfiles=1;autohscroll=false;autovscroll=false;db=1;dl=1;dr=1;dt=1;z=1};
+edit_info={cls="edit";text="信息框";left=264;top=170;right=585;bottom=243;edge=1;multiline=1;z=7};
+static={cls="static";text="UMI-OCR路径：";left=131;top=28;right=243;bottom=43;transparent=1;z=2};
+static2={cls="static";text="图片路径：";left=139;top=101;right=251;bottom=116;transparent=1;z=3}
+)
+/*}}*/
+
+import py3;
+//import py3.export.aardio;
+
+import console;
+import config;
+
+var autoOCR = py3.import("AutoOCR");
+var autoGetTxtToExcel = py3.import("AutoGetTxtToExcel");
+
+mainForm.edit_UmiPath.text=config.FilePath.UmiPath;
+mainForm.edit_ImagePath.text=config.FilePath.ImagePath;
+
+mainForm.button_OCR.oncommand = function(id,event){
+	autoOCR.UIMPath=mainForm.edit_UmiPath.text;
+	autoOCR.imagePath=mainForm.edit_ImagePath.text;
+	config.FilePath.UmiPath = mainForm.edit_UmiPath.text;
+	config.FilePath.ImagePath = mainForm.edit_ImagePath.text;
+	mainForm.edit_info.text="开始OCR";
+	autoOCR.run();
+	mainForm.edit_info.text="OCR完成";
+}
+
+mainForm.button_toExcel.oncommand = function(id,event){
+	autoGetTxtToExcel.imagePath=mainForm.edit_ImagePath.text;
+	config.FilePath.ImagePath = mainForm.edit_ImagePath.text;
+	mainForm.edit_info.text="开始转换";
+	autoGetTxtToExcel.run();
+	mainForm.edit_info.text="excel提取完成";
+}
+
+mainForm.show();
+return win.loopMessage();
