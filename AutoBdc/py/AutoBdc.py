@@ -32,7 +32,6 @@ class Person:
 数据类型：
 存量抵押解押（默认） 
 预告
-
 '''
 class PledgeInfo: 
     def __init__(self,_pd,_type=''):
@@ -131,15 +130,15 @@ def selectBusinessType(plinfo,port=9222):
     if plinfo.type=='一般抵押':
         tab.ele('text:房屋抵押登记').click()
         tab.ele('@placeholder:小类').click()
-        tab.ele('text:一般抵押').click()
+        tab.ele('text=一般抵押').click()
     elif plinfo.type=='最高额抵押':
         tab.ele('text:房屋抵押登记').click()
         tab.ele('@placeholder:小类').click()
-        tab.ele('text:最高额抵押').click()
+        tab.ele('text=最高额抵押').click()
     elif plinfo.type=='转本登记（预告转正式）':
-        tab.ele('text:转本登记').click()
+        tab.ele('text=转本登记').click()
         tab.ele('@placeholder:小类').click()
-        tab.ele('text:预售商品房抵押权预告转本登记').click()
+        tab.ele('text=预售商品房抵押权预告转本登记').click()
     elif plinfo.type=='解押':
         tab.ele('tag=li@@text():房屋抵押注销登记').click()
         tab.ele('@placeholder:小类').click()
@@ -157,20 +156,20 @@ def selectBusinessType(plinfo,port=9222):
         return 1
         
 
-
+    
     year=re.findall(".*(赣（)(.*)(）).*",plinfo.certificates[0])
     num=re.findall(".*(第)(.*)(号).*",plinfo.certificates[0])
-    
+    #print(year[0][1],num[0][1])
     
     tab.ele('@placeholder:证书类型').click()
-    _lis=tab.eles('tag=li@@class=el-select-dropdown__item')
+    _lis=tab.eles('tag=li@@class:el-select-dropdown__item')
     if not year == []:
         _lis[-2].click()
     else:
         _lis[-1].click()
     
     
-    if not (plinfo.type=='解押' or  plinfo.type=='预告解押'):
+    if not (plinfo.type=='解押' or  plinfo.type=='预告解押' or plinfo.type=='转本登记（预告转正式）'):
         tab.ele('text:确定').click()
         page.wait.load_start()
     else:
@@ -184,6 +183,8 @@ def selectBusinessType(plinfo,port=9222):
             tab.ele('tag=input@@placeholder:请输入他项权证').input(plinfo.certificates[0])
         tab.ele('text:确定').click()
         page.wait.load_start()
+    
+
     return 0
 
 #业务界面
@@ -222,7 +223,26 @@ def businessInput(plinfo,port=9222):
 
         tab.ele('text:银行合同编号').after('@placeholder:请输入合同编号').input(plinfo.contract)
         return 1
-
+    elif plinfo.type=='转本登记（预告转正式）':
+            
+            for per in plinfo.persons:
+                tab.ele('text:添加抵押人').click()
+                tab.ele('@placeholder:请输入姓名').input(per.name)
+                tab.ele('@placeholder:请输入联系方式').input(per.phone)
+                tab.ele('@@placeholder:请选择证件种类').click()
+                tab.ele('tag=li@@class:el-select-dropdown__item@@text()=身份证').click()
+                tab.ele('@placeholder:请输入身份证号').input(per.IdCard)
+                _ele=tab.ele('text:确认')
+                _ele.click()
+                _ele.wait.hidden()
+            
+            #添加抵押信息
+            inputs=tab.ele('.yw_con').eles('tag:input')
+            inputs[2].input(plinfo.contract)
+            inputs[8].click()
+            tab.ele('tag=li@@class:el-select-dropdown__item@@text()=1').click()
+            
+            return 1
 
     #添加抵押人信息
     for per in plinfo.persons:
@@ -269,9 +289,9 @@ def businessInput(plinfo,port=9222):
 
 #print(PledgeInfo(creatClipboardData(),'预告'))
 #print(creatClipboardData().iloc[0][11])
-'''
-data=PledgeInfo(creatClipboardData(),'预告')
+
+data=PledgeInfo(creatClipboardData())
+#print(person.name)
 newBusiness()
 selectBusinessType(data)
 businessInput(data)
-'''
