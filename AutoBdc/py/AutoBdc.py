@@ -289,9 +289,9 @@ def businessInput(plinfo,port=9222):
 
 #print(PledgeInfo(creatClipboardData(),'预告'))
 #print(creatClipboardData().iloc[0][11])
-
+'''
 data=PledgeInfo(creatClipboardData())
-#print(person.name)
 newBusiness()
 selectBusinessType(data)
 businessInput(data)
+'''
