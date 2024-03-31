@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
 import glob
 import pandas as pd
 import DrissionPage
+
 
 '''
 DanBaoInfo类型_type
@@ -52,15 +54,12 @@ def initPage(port=9222):
     page = DrissionPage.ChromiumPage(co)
     return page
 
-#def openPledgePage():
-    
 #担保系统录入抵押信息
 def dataPledge(data_info,dir_path,port=9222):
     
     page = initPage(port)
     tab=page.get_tab(page.find_tabs(title='担保管理系统'))
 
-    
     _title = tab.ele('tag=span@@text():首页@@class:tags-view-item').parent()
     if not _title.child('@@text():抵质押登记@@class:active'):
         if not tab.s_ele('@@role:menuitem@@text():权证管理@@class:is-opened'):
@@ -76,20 +75,48 @@ def dataPledge(data_info,dir_path,port=9222):
     
     
     tab.wait.ele_displayed(tab.ele('@@text()= 抵押登记 '))
+    是否推送业务=True
+    try:
+        tab.ele('@@text()= 签收 ').click()
+        tab.wait.ele_displayed(tab.ele('tag=p@@text():签收成功'))
+        tab.ele('tag=p@|text():签收成功@|text():不能做签收操作').after('tag=button@@text():确定').click()
+    except:
+        是否推送业务=False
+        pass
     tab.ele('@@text()= 抵押登记 ').click()
+
     
     
     tab.wait.ele_displayed(tab.ele('@class:zOperatingLeft'))
     tab.ele('@text():新增').click()
-
+    
+    
     tab.wait.ele_displayed(tab.ele('tag=label@@text():权证类型@@class:el-form-item__label'))
     
     tab.ele('tag=label@@text():权证类型@@class:el-form-item__label').after('@@class:el-input').click()
     
     tab.ele(f'tag=li@@text()={data_info.certificates_type}@@class:el-select-dropdown__item').click()
+    
+    #文件上传 路径函数
+    f_p=findFileList(dir_path,data_info.name)
 
-    tab.ele('tag=label@@text():影像标签@@class:el-form-item__label').after('@@class:el-input').click()
-    tab.ele('tag=li@@text()=他项权证@@class:el-select-dropdown__item').click()
+    if len(f_p)<10:
+        for i in range(0,len(f_p)):
+            tab.set.upload_files(f_p[i])
+            tab.ele('tag=label@@text():影像上传@@class:el-form-item__label').after('tag=button',2).click()
+            tab.wait.upload_paths_inputted()
+            tab.wait.load_start()
+    elif len(f_p)==0:
+        print('未找到文件')
+    else:
+        print('存在超过10个同名文件')
+        return 0
+    
+    for i in f_p:
+        tab.ele(f'tag=tr@@text():{os.path.basename(i)}').ele('tag=input@@placeholder:请选择').click()
+        tab.eles('tag=li@@text()=他项权证@@class:el-select-dropdown__item')[-1].click()
+    tab.eles(f'tag=tr@@text():{os.path.basename(f_p[0])}')[-1].ele('tag=button@@text():ocr识别').click()
+    tab.wait.load_start()
 
     tab.ele('tag=label@@text():登记机构类型@@class:el-form-item__label').after('@@class:el-input').click()
     tab.ele('tag=li@@text()=不动产登记中心@@class:el-select-dropdown__item').click()
@@ -97,23 +124,6 @@ def dataPledge(data_info,dir_path,port=9222):
     tab.ele('tag=label@@text():是否存在登记到期日@@class:el-form-item__label').after('@@class:el-input').click()
     tab.ele('tag=li@@text()=土地管理部门@@class:el-select-dropdown__item').after(('tag=li@@text()=是@@class:el-select-dropdown__item')).click()
 
-    
-    #文件上传 路径函数
-    f_p=findFileList(dir_path,data_info.name)
-    #print(dir_path)
-    #print(data_info.name)
-    #print(f_p)
-    if len(f_p)==1:
-        tab.set.upload_files(f_p[0])
-    elif len(f_p)==0:
-        print('未找到文件')
-    else:
-        print('存在多个同名文件')
-        return 0
-    tab.ele('tag=label@@text():影像上传@@class:el-form-item__label').after('tag=button',2).click()
-    tab.wait.upload_paths_inputted()
-    tab.wait.load_start()
-    
     
     tab.ele('tag=label@@text():是否电子权证@@class:el-form-item__label').after('@@class:el-input').click()
     if data_info.type=='电子权证':
@@ -131,15 +141,17 @@ def dataPledge(data_info,dir_path,port=9222):
     _e.click()
     tab.ele('tag=button@@text()=保存').click()
     
-    try:
+    if 是否推送业务:
         tab.wait.ele_displayed(tab.ele('tag=p@@text():抵质押登记权证已经创建成功'))
         tab.ele('tag=p@@text():抵质押登记权证已经创建成功').after('tag=button@@text():确定').click()
-    except DrissionPage.errors.ElementNotFoundError:
-        print(data_info.name,'没有推送的业务')
+        tab.ele(f'@@text()={data_info.certificates}').before('tag=input@@type:checkbox').click()
+        tab.ele('@@text():完结反馈业务').click()
+
+        tab.wait.ele_displayed(tab.ele('tag=p@@text():推送成功'))
+        tab.ele('tag=p@@text():推送成功').after('tab=button@@text():确定').click()
     
     tab.wait.ele_displayed(tab.ele('tag=button@@text()=返回'))
     tab.ele('tag=button@@text()=返回').click()
-
 
     return 1
 
@@ -178,8 +190,8 @@ def dataRuKu(data_info,port=9222):
         pass
 
     pass
-# dataPledges(creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\2024\202402\20240218')
+
+#dataPledges(creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\20240327')
 
 #dataPledges(creatClipboardData(),r'C:\Users\dkzx\Desktop\权证交接\20240321')
-
 

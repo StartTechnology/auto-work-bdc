@@ -8,19 +8,19 @@ Created on Sat Mar  9 12:54:33 2024
 import subprocess
 from DrissionPage import ChromiumPage, ChromiumOptions
 import DanBao
-
+import pandas.io.clipboard as cb
 
 # 第一次运行需要
 def firstRun():
     ChromiumOptions().use_system_user_path().save()
     co = ChromiumOptions().use_system_user_path()
 
-bowserpath='D:\PSBCBrowser\Program\PSBCBrowser.exe'
+bowserpath=r'D:\PSBCBrowser\Program\PSBCBrowser.exe'
 bowserpath1='\"C:\Program Files\Google\Chrome\Application\chrome.exe\"'
 # --remote-debugging-port=9222 --remote-allow-origins=*
 
 # 打开浏览器,并打开网页
-def openbowser(_bowserpath=bowserpath,_url='https://22.230.88.182/login.html'):
+def openbowser(_bowserpath=bowserpath1,_url='https://22.230.88.182/login.html'):
     cmd1 = _bowserpath + ' --remote-debugging-port=9222 --remote-allow-origins=*'
     subprocess.run(cmd1,shell=True ,creationflags=subprocess.CREATE_NO_WINDOW)
     co = ChromiumOptions().set_local_port(9222)
@@ -54,9 +54,9 @@ def useY():
     # page.wait(5)
     page.wait.ele_displayed(page.ele('@text():请确认已放入凭证'))
     page.ele('@text():请确认已放入凭证').parent().child('@text():已放入').click()
-    
 
-DanBao.dataPledges(DanBao.creatClipboardData(),r'C:\Users\dkzx\Desktop\权证交接\20240321')
+
+#openbowser()
+DanBao.dataPledges(DanBao.creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\20240328')
 #DanBao.dataPledges(DanBao.creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\2024\202402\20240218')
 #useY()
-#print('Hello')
