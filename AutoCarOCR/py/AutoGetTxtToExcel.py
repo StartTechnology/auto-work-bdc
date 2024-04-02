@@ -28,53 +28,51 @@ def getTxtToDataFrame(file,ruls):
     dataframe=[]
     context=''
     for i in range(0,len(file)):
-       if ruls[0][1] not in file[i]:
-           if ruls[0][0] in file[i]:
-               dirname = file[i].lstrip(ruls[0][0])
-               dirname=dirname.rstrip('\n')
-               pass
-           else:
-               context=context+file[i]
-               pass
-       else:
-           
-           singleData=[dirname]
-           
-           _r=re.findall(".*(居民身份证/|信用代码/|信用代码|居民身份证)(.*)(\n).*", context)
-           if _r: singleData.append(_r[0][1])
-           else:
-               singleData.append('')
-               pass
-           
-           _r=re.findall(".*(赣)(.*)(\n).*", context)
-           if _r: singleData.append("赣"+_r[0][1])
-           else:
-               singleData.append('')
-           
-           _r=re.findall(".*(机动车登记证书编号：|机动车登记证书编号\n|亏编号\n)(.*)(\n).*", context)
-           if _r: singleData.append(_r[0][1])
-           else:
-               singleData.append('')
-           
-           _r=re.findall(".*(\n)(.*)(牌).*", context)
-           if len(_r)>=2: singleData.append(_r[1][1]+'牌')
-           else:
-               singleData.append('')
-           
-           _r=re.findall(".*(3.登记口期|3.登记日期)(.*)(4.机动车|转移登记).*", context)
-           if _r: singleData.append(_r[0][1])
-           else:
-               singleData.append('')
-           
-           _r=re.findall(".*(抵押登记百期|抵押登记日期)(.*)(\n).*", context)
-           if _r: singleData.append(_r[0][1])
-           else:
-               singleData.append('')
-           # print(singleData)
-           dataframe.append(singleData)
-           dirname=''
-           context=''
-       i=i+1
+        if ruls[0][1] not in file[i]:
+            if ruls[0][0] in file[i]:
+                dirname = file[i].lstrip(ruls[0][0])
+                dirname=dirname.rstrip('\n')
+                pass
+            else:
+                context=context+file[i]
+                pass
+        else:  
+            singleData=[dirname]
+            _r=re.findall(".*(居民身份证/|信用代码/|信用代码|居民身份证)(.*)(\n).*", context)
+            if _r: singleData.append(_r[0][1])
+            else:
+                singleData.append('')
+                pass
+            
+            _r=re.findall(".*(赣)(.*)(\n).*", context)
+            if _r: singleData.append("赣"+_r[0][1])
+            else:
+                singleData.append('')
+            
+            _r=re.findall(".*(机动车登记证书编号：|机动车登记证书编号\n|亏编号\n)(.*)(\n).*", context)
+            if _r: singleData.append(_r[0][1])
+            else:
+                singleData.append('')
+            
+            _r=re.findall(".*(\n)(.*)(牌).*", context)
+            if len(_r)>=2: singleData.append(_r[1][1]+'牌')
+            else:
+                singleData.append('')
+            
+            _r=re.findall(".*(3.登记口期|3.登记日期)(.*)(4.机动车|转移登记).*", context)
+            if _r: singleData.append(_r[0][1])
+            else:
+                singleData.append('')
+            
+            _r=re.findall(".*(抵押登记百期|抵押登记日期)(.*)(\n).*", context)
+            if _r: singleData.append(_r[0][1])
+            else:
+                singleData.append('')
+            # print(singleData)
+            dataframe.append(singleData)
+            dirname=''
+            context=''
+        i=i+1
     return dataframe
 
 # getTxtToDataFrame(fileRead(resultFilePath), ruls)

@@ -19,7 +19,6 @@ def fileOCR(filepath,fileResult):
     cmd1 = UIMPath+ " --path "+filepath+"  -->>"+fileResult
     #os.system(cmd1)
     return subprocess.run(cmd1,shell=True ,creationflags=subprocess.CREATE_NO_WINDOW)
-    pass
 
 
 # 打开txt（） 如没有则创建文件并写入（），关闭
@@ -27,7 +26,6 @@ def writerFile(filePath,txt):
     file=open(filePath,'a')
     file.write(txt)
     file.close()
-    return 
 
 
 # 读取目录下所有一级文件夹数量返回列表
@@ -60,6 +58,5 @@ def run():
         writerFile(resultFilePath,"Start"+dirs+"\n")
         for files in listfile(os.path.join(imagePath, dirs)):
             fileOCR(os.path.join(imagePath, dirs,files),resultFilePath)
-            #print(fileOCR(os.path.join(imagePath, dirs,files),resultFilePath))
         writerFile(resultFilePath,"End"+dirs+"\n")
     return 0;
