@@ -80,6 +80,7 @@ def dataPledge(data_info,dir_path,port=9222):
         tab.ele('@@text()= 签收 ').click()
         tab.wait.ele_displayed(tab.ele('tag=p@@text():签收成功'))
         tab.ele('tag=p@|text():签收成功@|text():不能做签收操作').after('tag=button@@text():确定').click()
+        tab.wait.load_start()
     except:
         是否推送业务=False
         pass
@@ -144,13 +145,13 @@ def dataPledge(data_info,dir_path,port=9222):
     if 是否推送业务:
         tab.wait.ele_displayed(tab.ele('tag=p@@text():抵质押登记权证已经创建成功'))
         tab.ele('tag=p@@text():抵质押登记权证已经创建成功').after('tag=button@@text():确定').click()
-        tab.ele(f'@@text()={data_info.certificates}').before('tag=input@@type:checkbox').click()
-        tab.ele('@@text():完结反馈业务').click()
-
-        tab.wait.ele_displayed(tab.ele('tag=p@@text():推送成功'))
-        tab.ele('tag=p@@text():推送成功').after('tab=button@@text():确定').click()
+        tab.wait.load_start()
+        tab.ele(f'tag=tr@@text():{data_info.certificates}').ele('.el-checkbox').click()
+        tab.ele('tag=button@@text():完结反馈业务').click()
+        tab.wait.ele_displayed(tab.ele('@@text():推送成功'))
+        tab.ele('@@class=el-message-box@@text():推送成功').ele('tag=button@@text():确定').click()
     
-    tab.wait.ele_displayed(tab.ele('tag=button@@text()=返回'))
+    tab.wait.load_start()
     tab.ele('tag=button@@text()=返回').click()
 
     return 1
@@ -186,12 +187,49 @@ def dataRuKu(data_info,port=9222):
     if data_info.type=='电子权证':
         tab.ele(f'@@text()={data_info.certificates}').before('.el-checkbox').click()
         tab.ele('tag=button@@text()=电子权证入库').click()
+        tab.wait.ele_displayed(tab.ele('@@text():入库吗'))
+        tab.ele('@@class=el-message-box@@text():入库吗').ele('tag=button@@text():确定').click()
+        tab.wait.ele_displayed(tab.ele('@@text():入库成功'))
+        tab.ele('@@class=el-message-box@@text():入库成功').ele('tag=button@@text():确定').click()
+        tab.wait.load_start()
+        tab.ele('tag=button@@text()=返回').click()
+        return data_info.type
     elif data_info.type=='纸质权证':
-        pass
-
+        tab.ele('tag=button@@text():跳转纸质权证首次入库').click()
+        tab.wait.ele_displayed(tab.ele('@aria-label:封包信息'))
+        tab.ele('@aria-label:封包信息').ele('tag=button@@text():新增').click()
+        tab.wait.ele_displayed(tab.ele('@aria-label:封包详细信息'))
+        tab.ele('@aria-label:封包详细信息').ele(f'@@text()={data_info.certificates}').before('.el-checkbox').click()
+        tab.ele('@aria-label:封包详细信息').ele('tag=button@@text():确定').click()
+        tab.ele('@aria-label:封包信息').ele('tag=button@@text():确定').click()
+        tab.wait.load_start()
+        packetNos=tab.ele(f'tag=td@@text():{data_info.contract}').before('tag=td').text
+        tab.ele(f'tag=tr@@text():{data_info.contract}').ele('.el-checkbox').click()
+        tab.ele('tag=button@@text():发起入库').click()
+        return packetNos
+    
     pass
+
+#担保系统入库(多条信息)
+def dataRukus(list_data_info,port=9222):
+    for _data_info in list_data_info:
+        dataRuKu(_data_info,port)
+    return 1
 
 #dataPledges(creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\20240327')
 
 #dataPledges(creatClipboardData(),r'C:\Users\dkzx\Desktop\权证交接\20240321')
 
+def codetest():
+    page=initPage()
+    tab=page.get_tab(page.find_tabs(title='担保管理系统'))
+    #data_info=creatClipboardData()[0]
+    tab.ele('tag=button@@text():发起入库').click()
+
+#dataRuKu(creatClipboardData('house')[0])
+file_path=r'C:\Users\dkzx\Desktop\权证交接\20240402'
+data_list=creatClipboardData()
+#dataPledges(data_list,file_path)
+#dataRukus(data_list)
+#packageNo=dataRuKu(data_list[0])
+#print(data_list[0].name,packageNo)

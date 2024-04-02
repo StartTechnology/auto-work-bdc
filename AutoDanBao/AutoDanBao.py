@@ -55,8 +55,8 @@ def useY():
     page.wait.ele_displayed(page.ele('@text():请确认已放入凭证'))
     page.ele('@text():请确认已放入凭证').parent().child('@text():已放入').click()
 
-
+file_path=r'C:\Users\dkzx\Desktop\权证交接\20240402'
 #openbowser()
-DanBao.dataPledges(DanBao.creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\20240328')
-#DanBao.dataPledges(DanBao.creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\2024\202402\20240218')
+#DanBao.dataPledges(DanBao.creatClipboardData(),file_path)
+DanBao.dataPledges(DanBao.creatClipboardData('house'),file_path)
 #useY()
