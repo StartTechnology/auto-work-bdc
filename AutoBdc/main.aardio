@@ -12,6 +12,7 @@ edit_bowserpath={cls="edit";text="exe";left=277;top=27;right=514;bottom=50;edge=
 edit_info={cls="edit";text="信息框";left=535;top=285;right=714;bottom=393;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=7};
 edit_selectFile={cls="edit";text="图片文件夹";left=239;top=272;right=492;bottom=300;edge=1;multiline=1;z=10};
 edit_url={cls="edit";text="url";left=675;top=25;right=928;bottom=53;edge=1;z=5};
+groupbox_img={cls="groupbox";text="所需影像";left=65;top=131;right=912;bottom=219;edge=1;group=1;z=13};
 static={cls="static";text="浏览器地址";left=193;top=31;right=277;bottom=56;notify=1;transparent=1;z=1};
 static2={cls="static";text="请选择业务类型:";left=63;top=89;right=168;bottom=117;transparent=1;z=12}
 )
@@ -21,19 +22,25 @@ import py3;
 import fsys.dlg;
 import config;
 import console;
+import fsys.config;
 
+//配置文件（抵押类型及所用的文件/res/static.table）
+var static_config=fsys.config("/res/");
+var pladge_type=static_config.static.pladge_type;
 var autoBdc = py3.import("AutoBdc");
-var pladge_type=config.bdc.pladgetype;
 
+//从配日文件读取上一次选取文件变量
 mainForm.edit_bowserpath.text=config.bdc.bowserpath;
 mainForm.edit_url.text=config.bdc.url;
 mainForm.edit_selectFile.text=config.bdc.selectFileUrl
 
+//初始化按钮
 mainForm.button_firstRun.oncommand = function(id,event){
 	autoBdc.firstRun();
 	mainForm.edit_info.text='初始化完成';
 }
 
+//启动浏览器按钮
 mainForm.button_openBrowser.oncommand = function(id,event){
 	autoBdc.bowserpath=mainForm.edit_bowserpath.text;
 	config.bdc.bowserpath=mainForm.edit_bowserpath.text;
@@ -42,6 +49,7 @@ mainForm.button_openBrowser.oncommand = function(id,event){
 	mainForm.edit_info.text='浏览器已启动';
 }
 
+//存量房业务按钮
 mainForm.button3.oncommand = function(id,event){
 	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData());
 	autoBdc.newBusiness();
@@ -50,6 +58,7 @@ mainForm.button3.oncommand = function(id,event){
 	mainForm.edit_info.text='完成';
 }
 
+//预告业务按钮
 mainForm.button4.oncommand = function(id,event){
 	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData(),'预告');
 	autoBdc.newBusiness();
@@ -57,6 +66,7 @@ mainForm.button4.oncommand = function(id,event){
 	autoBdc.businessInput(data);
 	mainForm.edit_info.text='完成';
 }
+//选择文件路径框及按钮
 var selectFileUrl=config.bdc.selectFileUrl
 mainForm.button_selectfile.oncommand = function(id,event){
 	
@@ -80,9 +90,23 @@ mainForm.button_selectfile.oncommand = function(id,event){
 }
 
 
-mainForm.combobox_pledgetype.oncommand = function(id,event){
+//业务类型选择框
+static_config.static.pledge_img_info={
 	
 }
+for(i=1;#pladge_type;1){
+	mainForm.combobox_pledgetype.add(pladge_type[i])
+}
+mainForm.combobox_pledgetype.oncommand = function(id,event){
+	mainForm.edit_info.text=mainForm.combobox_pledgetype.selIndex;
+	mainForm.groupbox_img.addCtrl(
+		button={ cls="button";text="button";left=33;top=32;right=126;bottom=81;autoResize=false }  
+	)
+}
+
+//影像复选框Group
+
+
 
 mainForm.show();
 return win.loopMessage();

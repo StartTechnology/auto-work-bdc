@@ -1,2 +1,11 @@
 import console; 
-import config;
+import com.excel;
+
+var excel =com.excel();
+path=io.fullpath("/res/PledgeFileInfo.xlsx")
+var book =excel.WorkBooks.Open(path) ;
+//excel.Visible=true;
+var sh =book.Worksheets("pledge_img_info")
+
+console.log()
+console.pause(true);
