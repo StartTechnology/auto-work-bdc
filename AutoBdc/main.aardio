@@ -9,7 +9,7 @@ button_openBrowser={cls="button";text="打开浏览器并跳转";left=532;top=20
 button_selectfile={cls="button";text="选择文件";left=72;top=265;right=202;bottom=300;z=9};
 combobox_pledgetype={cls="combobox";left=171;top=86;right=286;bottom=112;edge=1;items={};mode="dropdown";z=11};
 edit_bowserpath={cls="edit";text="exe";left=277;top=27;right=514;bottom=50;edge=1;z=2};
-edit_info={cls="edit";text="信息框";left=541;top=273;right=720;bottom=381;edge=1;hscroll=1;multiline=1;readonly=1;style=1539;vscroll=1;z=7};
+edit_info={cls="edit";text="信息框";left=541;top=273;right=720;bottom=381;autovscroll=false;edge=1;hscroll=1;multiline=1;readonly=1;style=1539;vscroll=1;z=7};
 edit_selectFile={cls="edit";text="图片文件夹";left=239;top=272;right=492;bottom=300;edge=1;multiline=1;z=10};
 edit_url={cls="edit";text="url";left=675;top=25;right=928;bottom=53;edge=1;z=5};
 groupbox_img={cls="groupbox";text="所需影像";left=65;top=131;right=912;bottom=219;edge=1;group=1;z=13};
