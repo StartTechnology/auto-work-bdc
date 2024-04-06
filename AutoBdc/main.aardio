@@ -7,11 +7,11 @@ button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=
 button_firstRun={cls="button";text="第一次运行初始化";left=55;top=20;right=174;bottom=57;ah=1;aw=1;z=4};
 button_openBrowser={cls="button";text="打开浏览器并跳转";left=532;top=20;right=654;bottom=57;ah=1;aw=1;z=5};
 button_selectfile={cls="button";text="选择文件";left=72;top=265;right=202;bottom=300;ah=1;aw=1;z=10};
-checkbox={cls="checkbox";text="其他";left=790;top=179;right=843;bottom=199;ah=1;aw=1;disabled=1;group=1;z=25};
 checkbox1={cls="checkbox";text="不动产登记申请书";left=80;top=148;right=209;bottom=168;ah=1;aw=1;disabled=1;group=1;z=14};
 checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=219;top=148;right=376;bottom=168;ah=1;aw=1;disabled=1;group=1;z=24};
 checkbox11={cls="checkbox";text="关于抵押预告登记的约定";left=457;top=178;right=627;bottom=198;ah=1;aw=1;disabled=1;group=1;z=15};
 checkbox12={cls="checkbox";text="结婚证或具结保证书";left=638;top=178;right=783;bottom=198;ah=1;aw=1;disabled=1;group=1;z=26};
+checkbox13={cls="checkbox";text="其他";left=790;top=179;right=843;bottom=199;ah=1;aw=1;disabled=1;group=1;z=25};
 checkbox2={cls="checkbox";text="不动产抵押登记询问笔录";left=374;top=148;right=543;bottom=165;ah=1;aw=1;disabled=1;group=1;z=16};
 checkbox3={cls="checkbox";text="申请人身份证明";left=545;top=148;right=663;bottom=164;ah=1;aw=1;disabled=1;group=1;z=17};
 checkbox4={cls="checkbox";text="委托函";left=673;top=148;right=741;bottom=166;ah=1;aw=1;disabled=1;group=1;z=18};
@@ -114,11 +114,18 @@ mainForm.combobox_pledgetype.onOk  = function(id,event){
 	image_list=static_config.pledge_img_info[mainForm.combobox_pledgetype.selIndex]
 
 	for(i=1;#image_list;1){
-		mainForm['checkbox'+i].color=
+		
 		if(image_list[i]){
 			
+			//mainForm['checkbox'+i].checked=1;
+			mainForm['checkbox'+i].setFont(name="宋体";strike=1);
 
 		}
+		else {
+			//mainForm['checkbox'+i].checked=0;
+			mainForm['checkbox'+i].setFont(name="宋体";strike=0);
+		}
+		
 	}
 
 }
