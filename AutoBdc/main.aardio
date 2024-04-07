@@ -4,9 +4,10 @@ mainForm = win.form(text="不动产抵押Auto";right=959;bottom=591)
 mainForm.add(
 button3={cls="button";text="使用剪贴板数据填入（存量房）";left=341;top=80;right=539;bottom=125;ah=1;aw=1;z=7};
 button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=586;top=80;right=797;bottom=125;ah=1;aw=1;z=9};
+button_GD={cls="button";text="影像归档";left=531;top=267;right=667;bottom=302;z=27};
 button_firstRun={cls="button";text="第一次运行初始化";left=55;top=20;right=174;bottom=57;ah=1;aw=1;z=4};
 button_openBrowser={cls="button";text="打开浏览器并跳转";left=532;top=20;right=654;bottom=57;ah=1;aw=1;z=5};
-button_selectfile={cls="button";text="选择文件";left=72;top=265;right=202;bottom=300;ah=1;aw=1;z=10};
+button_selectfile={cls="button";text="选择文件";left=72;top=265;right=202;bottom=300;ah=1;aw=1;disabled=1;z=10};
 checkbox1={cls="checkbox";text="不动产登记申请书";left=80;top=148;right=209;bottom=168;ah=1;aw=1;disabled=1;group=1;z=14};
 checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=219;top=148;right=376;bottom=168;ah=1;aw=1;disabled=1;group=1;z=24};
 checkbox11={cls="checkbox";text="关于抵押预告登记的约定";left=457;top=178;right=627;bottom=198;ah=1;aw=1;disabled=1;group=1;z=15};
@@ -23,6 +24,7 @@ checkbox9={cls="checkbox";text="抵押合同";left=374;top=178;right=453;bottom=
 combobox_pledgetype={cls="combobox";left=171;top=86;right=286;bottom=112;ah=1;aw=1;edge=1;items={};mode="dropdown";z=12};
 edit_bowserpath={cls="edit";text="exe";left=277;top=27;right=514;bottom=50;ah=1;aw=1;edge=1;z=3};
 edit_info={cls="edit";left=708;top=432;right=887;bottom=540;ah=1;autovscroll=false;aw=1;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=8};
+edit_name={cls="edit";text="客户姓名";left=709;top=274;right=828;bottom=298;edge=1;z=28};
 edit_selectFile={cls="edit";text="图片文件夹";left=239;top=272;right=492;bottom=300;ah=1;aw=1;edge=1;multiline=1;z=11};
 edit_url={cls="edit";text="url";left=675;top=25;right=928;bottom=53;ah=1;aw=1;edge=1;z=6};
 groupbox_img={cls="groupbox";text="所需影像";left=60;top=129;right=907;bottom=217;ah=1;aw=1;edge=1;group=1;z=1};
@@ -32,9 +34,10 @@ static2={cls="static";text="请选择业务类型:";left=63;top=89;right=168;bot
 /*}}*/
 
 import py3;
-import fsys.dlg;
 import config;
 import console;
+import fsys;
+import fsys.dlg;
 import fsys.config;
 
 //配置文件（抵押类型及所用的文件/res/static.table）
@@ -104,6 +107,7 @@ mainForm.combobox_pledgetype.onOk  = function(id,event){
 			mainForm['checkbox'+i].setFont(strike=1);
 		}
 		//重绘控件 更新控件
+		mainForm['checkbox'+i].checked=false;
 		mainForm['checkbox'+i].redraw();
 	}
 	select_img_count=#checkbox_items;
@@ -119,12 +123,22 @@ mainForm.button_selectfile.oncommand = function(id,event){
 	
 	config.bdc.selectFileUrl=mainForm.edit_selectFile.text
 	selectFileUrl=mainForm.edit_selectFile.text;
+	img_type=pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]];
+	
+	var file_path = fsys.dlg.openEx('所有文件|*.*|',"选择"+img_type,selectFileUrl); 
+	if(!#file_path){return ;}
+	file_dir=io.splitpath(file_path[1]).dir;
+	file_type_dir=io.joinpath(file_dir,img_type);
+	if(!io.exist(file_type_dir)){
+		io.createDir(file_type_dir);
+		io.
+	}
+	fsys.move(file_path,file_type_dir);
 
 	
-	var path = fsys.dlg.openEx('所有文件|*.*|',"选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]],selectFileUrl); 
-	for(i in path){
-		mainForm.edit_info.print(path[i]);
-	}
+	
+	mainForm["checkbox"+checkbox_items[#checkbox_items-select_img_count+1]].checked=true;
+	
 	select_img_count=select_img_count-1;
 	
 	
@@ -141,16 +155,17 @@ mainForm.button_selectfile.oncommand = function(id,event){
 	}
 	else {
 		owner.disabled=false;
-		owner.text="请选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]]+"影像";
+		owner.text="请选择"+img_type+"影像";
 	}
 	
 	//config.bdc.path=path
 }
 
 
-
-
-
+//影像归档
+mainForm.button_GD.oncommand = function(id,event){
+	
+}
 
 mainForm.show();
 return win.loopMessage();
