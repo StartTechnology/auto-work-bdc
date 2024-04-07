@@ -2,7 +2,7 @@
 <project ver="10" name="AutoBdc" libEmbed="true" icon="..." ui="win" output="AutoBdc.exe" CompanyName="单位名称" FileDescription="AutoBdc" LegalCopyright="Copyright (C) 作者 2024" ProductName="AutoBdc" InternalName="AutoBdc" FileVersion="0.0.0.8" ProductVersion="0.0.0.8" publishDir="/dist/" dstrip="false" local="false" ignored="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" comment="嵌入资源目录" local="false" ignored="false">
-		<file name="initPledgeFromExcel.aardio" path="res\initPledgeFromExcel.aardio" comment="res\pledge.aardio"/>
+		<file name="initPledgeFromExcel.aardio" path="res\initPledgeFromExcel.aardio" comment="res\initPledgeFromExcel.aardio"/>
 		<file name="PledgeFileInfo.xlsx" path="res\PledgeFileInfo.xlsx" comment="res\PledgeFileInfo.xlsx"/>
 		<file name="static.table" path="res\static.table" comment="res\static.table"/>
 	</folder>

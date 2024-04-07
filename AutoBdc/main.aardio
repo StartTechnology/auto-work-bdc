@@ -11,7 +11,7 @@ checkbox1={cls="checkbox";text="不动产登记申请书";left=80;top=148;right=
 checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=219;top=148;right=376;bottom=168;ah=1;aw=1;disabled=1;group=1;z=24};
 checkbox11={cls="checkbox";text="关于抵押预告登记的约定";left=457;top=178;right=627;bottom=198;ah=1;aw=1;disabled=1;group=1;z=15};
 checkbox12={cls="checkbox";text="结婚证或具结保证书";left=638;top=178;right=783;bottom=198;ah=1;aw=1;disabled=1;group=1;z=26};
-checkbox13={cls="checkbox";text="其他";left=790;top=179;right=843;bottom=199;ah=1;aw=1;disabled=1;group=1;z=25};
+checkbox13={cls="checkbox";text="其他";left=790;top=179;right=843;bottom=199;ah=1;aw=1;group=1;z=25};
 checkbox2={cls="checkbox";text="不动产抵押登记询问笔录";left=374;top=148;right=543;bottom=165;ah=1;aw=1;disabled=1;group=1;z=16};
 checkbox3={cls="checkbox";text="申请人身份证明";left=545;top=148;right=663;bottom=164;ah=1;aw=1;disabled=1;group=1;z=17};
 checkbox4={cls="checkbox";text="委托函";left=673;top=148;right=741;bottom=166;ah=1;aw=1;disabled=1;group=1;z=18};
@@ -22,7 +22,7 @@ checkbox8={cls="checkbox";text="借款合同";left=291;top=179;right=372;bottom=
 checkbox9={cls="checkbox";text="抵押合同";left=374;top=178;right=453;bottom=198;ah=1;aw=1;disabled=1;group=1;z=23};
 combobox_pledgetype={cls="combobox";left=171;top=86;right=286;bottom=112;ah=1;aw=1;edge=1;items={};mode="dropdown";z=12};
 edit_bowserpath={cls="edit";text="exe";left=277;top=27;right=514;bottom=50;ah=1;aw=1;edge=1;z=3};
-edit_info={cls="edit";text="信息框";left=541;top=273;right=720;bottom=381;ah=1;autovscroll=false;aw=1;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=8};
+edit_info={cls="edit";left=708;top=432;right=887;bottom=540;ah=1;autovscroll=false;aw=1;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=8};
 edit_selectFile={cls="edit";text="图片文件夹";left=239;top=272;right=492;bottom=300;ah=1;aw=1;edge=1;multiline=1;z=11};
 edit_url={cls="edit";text="url";left=675;top=25;right=928;bottom=53;ah=1;aw=1;edge=1;z=6};
 groupbox_img={cls="groupbox";text="所需影像";left=60;top=129;right=907;bottom=217;ah=1;aw=1;edge=1;group=1;z=1};
@@ -40,6 +40,9 @@ import fsys.config;
 //配置文件（抵押类型及所用的文件/res/static.table）
 var static_config=fsys.config("/res/").static;
 var pledge_type=static_config.pledge_type;
+var pledge_imgtype=static_config.pledge_imgtype;
+var pledge_img_info=static_config.pledge_img_info;
+
 var autoBdc = py3.import("AutoBdc");
 
 //从配日文件读取上一次选取文件变量
@@ -50,7 +53,7 @@ mainForm.edit_selectFile.text=config.bdc.selectFileUrl
 //初始化按钮
 mainForm.button_firstRun.oncommand = function(id,event){
 	autoBdc.firstRun();
-	mainForm.edit_info.text='初始化完成';
+	mainForm.edit_info.print('初始化完成');
 }
 
 //启动浏览器按钮
@@ -59,7 +62,7 @@ mainForm.button_openBrowser.oncommand = function(id,event){
 	config.bdc.bowserpath=mainForm.edit_bowserpath.text;
 	config.bdc.url=mainForm.edit_url.text;
 	autoBdc.openbowser(mainForm.edit_bowserpath.text,mainForm.edit_url.text);
-	mainForm.edit_info.text='浏览器已启动';
+	mainForm.edit_info.print('浏览器已启动');
 }
 
 //存量房业务按钮
@@ -68,7 +71,7 @@ mainForm.button3.oncommand = function(id,event){
 	autoBdc.newBusiness();
 	autoBdc.selectBusinessType(data);
 	autoBdc.businessInput(data);
-	mainForm.edit_info.text='完成';
+	mainForm.edit_info.print('完成');
 }
 
 //预告业务按钮
@@ -77,58 +80,76 @@ mainForm.button4.oncommand = function(id,event){
 	autoBdc.newBusiness();
 	autoBdc.selectBusinessType(data);
 	autoBdc.businessInput(data);
-	mainForm.edit_info.text='完成';
+	mainForm.edit_info.print('完成');
 }
-//选择文件路径框及按钮
-var selectFileUrl=config.bdc.selectFileUrl
-mainForm.button_selectfile.oncommand = function(id,event){
-	
-	config.bdc.selectFileUrl=mainForm.edit_selectFile.text
-	selectFileUrl=mainForm.edit_selectFile.text
-	/*
-	不动产登记申请书
-	不动产抵押登记询问笔录
-	申请人身份证明
-	委托函
-	不动产权证书或房屋所有权证
-	个人住房贷款借款合同
-	其他
-	*/
-	
-	var path = fsys.dlg.openEx('所有文件|*.*|','选择身份证图片',selectFileUrl); 
-	for(i in path){
-		mainForm.edit_info.text=path[i]
-	}
-	config.bdc.path=path
-}
-
 
 //业务类型选择框
 for(i=1;#pledge_type;1){
 	mainForm.combobox_pledgetype.add(pledge_type[i])
 }
 //复选框控件变量
-var checkbox_list={}
+var checkbox_items={};
+//获取文件按钮选择次数
+var select_img_count = 0; 
 mainForm.combobox_pledgetype.onOk  = function(id,event){
-	mainForm.edit_info.text=mainForm.combobox_pledgetype.selIndex;
-	image_list=static_config.pledge_img_info[mainForm.combobox_pledgetype.selIndex]
-
+	checkbox_items={};
+	mainForm.edit_info.print(mainForm.combobox_pledgetype.selIndex);
+	image_list=pledge_img_info[mainForm.combobox_pledgetype.selIndex]
 	for(i=1;#image_list;1){
-		
 		if(image_list[i]){
-			
-			//mainForm['checkbox'+i].checked=1;
-			mainForm['checkbox'+i].setFont(name="宋体";strike=1);
-
+			mainForm['checkbox'+i].setFont(strike=0);
+			table.push(checkbox_items,i);
 		}
 		else {
-			//mainForm['checkbox'+i].checked=0;
-			mainForm['checkbox'+i].setFont(name="宋体";strike=0);
+			mainForm['checkbox'+i].setFont(strike=1);
 		}
+		//重绘控件 更新控件
+		mainForm['checkbox'+i].redraw();
+	}
+	select_img_count=#checkbox_items;
+	mainForm.button_selectfile.text="请选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]]+"影像";
+	mainForm.button_selectfile.disabled=false;
+}
+
+
+
+//选择文件路径框及按钮
+var selectFileUrl=config.bdc.selectFileUrl;
+mainForm.button_selectfile.oncommand = function(id,event){
+	
+	config.bdc.selectFileUrl=mainForm.edit_selectFile.text
+	selectFileUrl=mainForm.edit_selectFile.text;
+
+	
+	var path = fsys.dlg.openEx('所有文件|*.*|',"选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]],selectFileUrl); 
+	for(i in path){
+		mainForm.edit_info.print(path[i]);
+	}
+	select_img_count=select_img_count-1;
+	
+	
+	if(select_img_count==1){
+		if(mainForm['checkbox'+checkbox_items[#checkbox_items]].checked==false){
+			select_img_count=select_img_count-1;
+		}
+	}
+	
+	if(select_img_count==0){
+		owner.disabled=true;
+		owner.text="图片选择完成";
 		
 	}
-
+	else {
+		owner.disabled=false;
+		owner.text="请选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]]+"影像";
+	}
+	
+	//config.bdc.path=path
 }
+
+
+
+
 
 
 mainForm.show();
