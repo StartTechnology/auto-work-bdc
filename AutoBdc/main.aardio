@@ -1,11 +1,16 @@
-import fonts.fontAwesome;
 
 import win.ui;
+import win.ui.tabs;
+import fonts.fontAwesome;
+
+
+
+
 /*DSG{{*/
 mainForm = win.form(text="不动产抵押Auto";right=959;bottom=591)
 mainForm.add(
-bkplus={cls="bkplus";left=2;top=5;right=957;bottom=42;bgcolor=13152654;z=1};
-bkplus2={cls="bkplus";left=17;top=9;right=93;bottom=36;z=32};
+bkplus={cls="bkplus";left=1;top=5;right=956;bottom=42;bgcolor=13152654;z=1};
+bkplus2={cls="bkplus";text="选项卡";left=17;top=9;right=93;bottom=36;z=32};
 button3={cls="button";text="使用剪贴板数据填入（存量房）";left=334;top=184;right=532;bottom=229;ah=1;aw=1;z=8};
 button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=579;top=184;right=790;bottom=229;ah=1;aw=1;z=10};
 button_GD={cls="button";text="影像归档";left=524;top=371;right=660;bottom=406;disabled=1;z=28};
@@ -32,14 +37,17 @@ edit_name={cls="edit";text="客户姓名";left=702;top=378;right=821;bottom=402;
 edit_selectFile={cls="edit";text="图片文件夹";left=232;top=376;right=485;bottom=404;ah=1;aw=1;edge=1;multiline=1;z=12};
 edit_url={cls="edit";text="url";left=668;top=129;right=921;bottom=157;ah=1;aw=1;edge=1;z=7};
 groupbox_img={cls="groupbox";text="所需影像";left=53;top=233;right=900;bottom=321;ah=1;aw=1;edge=1;group=1;z=2};
-plus={cls="plus";text="设置";left=115;top=10;right=214;bottom=40;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF013';textPadding={left=39};z=30};
-plus2={cls="plus";text="收集影像";left=217;top=9;right=316;bottom=39;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF030';textPadding={left=39};z=31};
+nav_img={cls="plus";text="收集影像";left=214;top=12;right=336;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF030';textPadding={left=39};z=31};
+nav_setting={cls="plus";text="设置";left=114;top=12;right=213;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF013';textPadding={left=39};z=30};
 static={cls="static";text="浏览器地址";left=186;top=135;right=270;bottom=160;ah=1;aw=1;notify=1;transparent=1;z=3};
 static2={cls="static";text="请选择业务类型:";left=56;top=193;right=161;bottom=221;ah=1;aw=1;transparent=1;z=14}
 )
 /*}}*/
 
-mainForm.plus.skin({
+
+var tbs = win.ui.tabs(mainForm.nav_setting,mainForm.nav_img);
+//所有选项卡样式
+tbs.skin({
 	background={
 		default=0xFF55BB8A;
 		disabled=0xFFCCCCCC;
@@ -57,18 +65,6 @@ mainForm.plus.skin({
 
 })
 
-mainForm.plus2.skin({
-	background={
-		default=0xFF55BB8A;
-		disabled=0xFFCCCCCC;
-		hover=0xFF928BB3
-	};
-	color={
-		default=0xFF000000;
-		disabled=0xFF6D6D6D
-	}
-})
-
 import py3;
 import config;
 import console;
@@ -76,7 +72,8 @@ import fsys;
 import fsys.dlg;
 import fsys.config;
 
-import win.ui.tabs;
+//选项卡绑定窗口
+tbs.loadForm(1,"\dlg\setting.aardio" );  
 
 //配置文件（抵押类型及所用的文件/res/static.table）
 var static_config=fsys.config("/res/").static;
