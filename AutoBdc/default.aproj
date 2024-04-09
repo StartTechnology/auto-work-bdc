@@ -6,7 +6,9 @@
 		<file name="PledgeFileInfo.xlsx" path="res\PledgeFileInfo.xlsx" comment="res\PledgeFileInfo.xlsx"/>
 		<file name="static.table" path="res\static.table" comment="res\static.table"/>
 	</folder>
-	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false"/>
+	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
+		<file name="setting.aardio" path="dlg\setting.aardio" comment="dlg\setting.aardio"/>
+	</folder>
 	<folder name="安装模块" path="tools" embed="false" comment="目录" local="false" ignored="true">
 		<file name="pip" path="tools\pip.aardio" comment="tools\pip.aardio"/>
 	</folder>
