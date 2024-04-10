@@ -1,8 +1,33 @@
+import py3;
 import win.ui;
 /*DSG{{*/
-var winform = win.form(text="aardio form";right=759;bottom=469)
-winform.add()
+var winform = win.form(text="aardio form";right=954;bottom=449)
+winform.add(
+button={cls="button";text="使用剪贴板数据填入（存量房）";left=77;top=93;right=275;bottom=138;ah=1;aw=1;z=1};
+button2={cls="button";text="使用剪贴板数据填入（预告抵押）";left=322;top=93;right=533;bottom=138;ah=1;aw=1;z=2}
+)
 /*}}*/
+
+var autoBdc = py3.import("AutoBdc");
+
+//存量房业务按钮
+winform.button.oncommand = function(id,event){
+	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData());
+	autoBdc.newBusiness();
+	autoBdc.selectBusinessType(data);
+	autoBdc.businessInput(data);
+	mainForm.edit_info.print('完成');
+}
+
+
+//预告抵押业务按钮
+winform.button2.oncommand = function(id,event){
+	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData(),'预告');
+	autoBdc.newBusiness();
+	autoBdc.selectBusinessType(data);
+	autoBdc.businessInput(data);
+	mainForm.edit_info.print('完成');
+}
 
 winform.show();
 win.loopMessage();

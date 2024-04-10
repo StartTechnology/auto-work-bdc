@@ -4,7 +4,7 @@ import config;
 import com.excel;
 import fsys.config;
 /*DSG{{*/
-var winform = win.form(text="aardio form";right=954;bottom=215)
+var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
 button_firstRun={cls="button";text="第一次运行初始化";left=21;top=27;right=158;bottom=64;ah=1;aw=1;z=3};
 button_openBrowser={cls="button";text="打开浏览器并跳转";left=21;top=78;right=158;bottom=115;ah=1;aw=1;z=4};
