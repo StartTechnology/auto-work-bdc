@@ -7,7 +7,10 @@
 		<file name="static.table" path="res\static.table" comment="res\static.table"/>
 	</folder>
 	<folder name="窗体文件" path="dlg" comment="目录" embed="true" local="false" ignored="false">
-		<file name="setting.aardio" path="dlg\setting.aardio" comment="dlg\setting.aardio"/>
+		<file name="start.aardio" path="dlg\start.aardio" comment="dlg\setting.aardio"/>
+		<file name="image.aardio" path="dlg\image.aardio" comment="dlg\image.aardio"/>
+		<file name="getdata.aardio" path="dlg\getdata.aardio" comment="dlg\getdata.aardio"/>
+		<file name="pledge.aardio" path="dlg\pledge.aardio" comment="dlg\pledge.aardio"/>
 	</folder>
 	<folder name="安装模块" path="tools" embed="false" comment="目录" local="false" ignored="true">
 		<file name="pip" path="tools\pip.aardio" comment="tools\pip.aardio"/>

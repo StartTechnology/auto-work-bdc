@@ -2,50 +2,43 @@
 import win.ui;
 import win.ui.tabs;
 import fonts.fontAwesome;
-
-
-
-
 /*DSG{{*/
 mainForm = win.form(text="不动产抵押Auto";right=959;bottom=591)
 mainForm.add(
 bkplus={cls="bkplus";left=1;top=5;right=956;bottom=42;bgcolor=13152654;z=1};
-bkplus2={cls="bkplus";text="选项卡";left=17;top=9;right=93;bottom=36;z=32};
-button3={cls="button";text="使用剪贴板数据填入（存量房）";left=334;top=184;right=532;bottom=229;ah=1;aw=1;z=8};
-button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=579;top=184;right=790;bottom=229;ah=1;aw=1;z=10};
-button_GD={cls="button";text="影像归档";left=524;top=371;right=660;bottom=406;disabled=1;z=28};
-button_firstRun={cls="button";text="第一次运行初始化";left=48;top=124;right=167;bottom=161;ah=1;aw=1;z=5};
-button_openBrowser={cls="button";text="打开浏览器并跳转";left=525;top=124;right=647;bottom=161;ah=1;aw=1;z=6};
-button_selectfile={cls="button";text="选择文件";left=65;top=369;right=195;bottom=404;ah=1;aw=1;disabled=1;z=11};
-checkbox1={cls="checkbox";text="不动产登记申请书";left=73;top=252;right=202;bottom=272;ah=1;aw=1;disabled=1;group=1;z=15};
-checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=212;top=252;right=369;bottom=272;ah=1;aw=1;disabled=1;group=1;z=25};
-checkbox11={cls="checkbox";text="关于抵押预告登记的约定";left=450;top=282;right=620;bottom=302;ah=1;aw=1;disabled=1;group=1;z=16};
-checkbox12={cls="checkbox";text="结婚证或具结保证书";left=631;top=282;right=776;bottom=302;ah=1;aw=1;disabled=1;group=1;z=27};
-checkbox13={cls="checkbox";text="其他";left=783;top=283;right=836;bottom=303;ah=1;aw=1;group=1;z=26};
-checkbox2={cls="checkbox";text="不动产抵押登记询问笔录";left=367;top=252;right=536;bottom=269;ah=1;aw=1;disabled=1;group=1;z=17};
-checkbox3={cls="checkbox";text="申请人身份证明";left=538;top=252;right=656;bottom=268;ah=1;aw=1;disabled=1;group=1;z=18};
-checkbox4={cls="checkbox";text="委托函";left=666;top=252;right=734;bottom=270;ah=1;aw=1;disabled=1;group=1;z=19};
-checkbox5={cls="checkbox";text="商品房预售合同";left=738;top=252;right=851;bottom=272;ah=1;aw=1;disabled=1;group=1;z=20};
-checkbox6={cls="checkbox";text="不动产登记证明";left=74;top=283;right=191;bottom=303;ah=1;aw=1;disabled=1;group=1;z=21};
-checkbox7={cls="checkbox";text="房产证";left=202;top=283;right=272;bottom=303;ah=1;aw=1;disabled=1;group=1;z=22};
-checkbox8={cls="checkbox";text="借款合同";left=284;top=283;right=365;bottom=303;ah=1;aw=1;disabled=1;group=1;z=23};
-checkbox9={cls="checkbox";text="抵押合同";left=367;top=282;right=446;bottom=302;ah=1;aw=1;disabled=1;group=1;z=24};
-combobox_pledgetype={cls="combobox";left=164;top=190;right=279;bottom=216;ah=1;aw=1;edge=1;items={};mode="dropdown";z=13};
-edit_bowserpath={cls="edit";text="exe";left=270;top=131;right=507;bottom=154;ah=1;aw=1;edge=1;z=4};
-edit_info={cls="edit";left=58;top=450;right=237;bottom=558;ah=1;autovscroll=false;aw=1;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=9};
-edit_name={cls="edit";text="客户姓名";left=702;top=378;right=821;bottom=402;edge=1;z=29};
-edit_selectFile={cls="edit";text="图片文件夹";left=232;top=376;right=485;bottom=404;ah=1;aw=1;edge=1;multiline=1;z=12};
-edit_url={cls="edit";text="url";left=668;top=129;right=921;bottom=157;ah=1;aw=1;edge=1;z=7};
-groupbox_img={cls="groupbox";text="所需影像";left=53;top=233;right=900;bottom=321;ah=1;aw=1;edge=1;group=1;z=2};
-nav_img={cls="plus";text="收集影像";left=214;top=12;right=336;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF030';textPadding={left=39};z=31};
-nav_setting={cls="plus";text="设置";left=114;top=12;right=213;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF013';textPadding={left=39};z=30};
-static={cls="static";text="浏览器地址";left=186;top=135;right=270;bottom=160;ah=1;aw=1;notify=1;transparent=1;z=3};
-static2={cls="static";text="请选择业务类型:";left=56;top=193;right=161;bottom=221;ah=1;aw=1;transparent=1;z=14}
+bkplus2={cls="bkplus";text="选项卡";left=17;top=9;right=93;bottom=36;z=27};
+button3={cls="button";text="使用剪贴板数据填入（存量房）";left=325;top=280;right=523;bottom=325;ah=1;aw=1;z=3};
+button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=570;top=280;right=781;bottom=325;ah=1;aw=1;z=5};
+button_GD={cls="button";text="影像归档";left=515;top=467;right=651;bottom=502;disabled=1;z=23};
+button_selectfile={cls="button";text="选择文件";left=56;top=465;right=186;bottom=500;ah=1;aw=1;disabled=1;z=6};
+checkbox1={cls="checkbox";text="不动产登记申请书";left=64;top=348;right=193;bottom=368;ah=1;aw=1;disabled=1;group=1;z=10};
+checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=203;top=348;right=360;bottom=368;ah=1;aw=1;disabled=1;group=1;z=20};
+checkbox11={cls="checkbox";text="关于抵押预告登记的约定";left=441;top=378;right=611;bottom=398;ah=1;aw=1;disabled=1;group=1;z=11};
+checkbox12={cls="checkbox";text="结婚证或具结保证书";left=622;top=378;right=767;bottom=398;ah=1;aw=1;disabled=1;group=1;z=22};
+checkbox13={cls="checkbox";text="其他";left=774;top=379;right=827;bottom=399;ah=1;aw=1;group=1;z=21};
+checkbox2={cls="checkbox";text="不动产抵押登记询问笔录";left=358;top=348;right=527;bottom=365;ah=1;aw=1;disabled=1;group=1;z=12};
+checkbox3={cls="checkbox";text="申请人身份证明";left=529;top=348;right=647;bottom=364;ah=1;aw=1;disabled=1;group=1;z=13};
+checkbox4={cls="checkbox";text="委托函";left=657;top=348;right=725;bottom=366;ah=1;aw=1;disabled=1;group=1;z=14};
+checkbox5={cls="checkbox";text="商品房预售合同";left=729;top=348;right=842;bottom=368;ah=1;aw=1;disabled=1;group=1;z=15};
+checkbox6={cls="checkbox";text="不动产登记证明";left=65;top=379;right=182;bottom=399;ah=1;aw=1;disabled=1;group=1;z=16};
+checkbox7={cls="checkbox";text="房产证";left=193;top=379;right=263;bottom=399;ah=1;aw=1;disabled=1;group=1;z=17};
+checkbox8={cls="checkbox";text="借款合同";left=275;top=379;right=356;bottom=399;ah=1;aw=1;disabled=1;group=1;z=18};
+checkbox9={cls="checkbox";text="抵押合同";left=358;top=378;right=437;bottom=398;ah=1;aw=1;disabled=1;group=1;z=19};
+combobox_pledgetype={cls="combobox";left=155;top=286;right=270;bottom=312;ah=1;aw=1;edge=1;items={};mode="dropdown";z=8};
+custom={cls="custom";text="自定义控件";left=4;top=41;right=959;bottom=257;z=28};
+edit_info={cls="edit";left=44;top=512;right=397;bottom=570;ah=1;autovscroll=false;aw=1;edge=1;hscroll=1;multiline=1;readonly=1;vscroll=1;z=4};
+edit_name={cls="edit";text="客户姓名";left=693;top=474;right=812;bottom=498;edge=1;z=24};
+edit_selectFile={cls="edit";text="图片文件夹";left=223;top=472;right=476;bottom=500;ah=1;aw=1;edge=1;multiline=1;z=7};
+groupbox_img={cls="groupbox";text="所需影像";left=44;top=329;right=891;bottom=417;ah=1;aw=1;edge=1;group=1;z=2};
+nav_getdata={cls="plus";text="数据处理";left=337;top=6;right=459;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF15C';textPadding={left=39};z=29};
+nav_img={cls="plus";text="收集影像";left=214;top=6;right=336;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF030';textPadding={left=39};z=26};
+nav_pledge={cls="plus";text="抵押登记";left=460;top=5;right=582;bottom=41;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF044';textPadding={left=39};z=30};
+nav_start={cls="plus";text="初始化";left=101;top=6;right=213;bottom=42;align="left";bgcolor=-7685291;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-13;name='FontAwesome');padding={left=20}};iconText='\uF013';textPadding={left=39};z=25};
+static2={cls="static";text="请选择业务类型:";left=47;top=289;right=152;bottom=317;ah=1;aw=1;transparent=1;z=9}
 )
 /*}}*/
 
-
-var tbs = win.ui.tabs(mainForm.nav_setting,mainForm.nav_img);
+var tbs = win.ui.tabs(mainForm.nav_start,mainForm.nav_img,mainForm.nav_getdata,mainForm.nav_pledge);
 //所有选项卡样式
 tbs.skin({
 	background={
@@ -73,7 +66,10 @@ import fsys.dlg;
 import fsys.config;
 
 //选项卡绑定窗口
-tbs.loadForm(1,"\dlg\setting.aardio" );  
+tbs.loadForm(1,"\dlg\start.aardio" );
+tbs.loadForm(2,"\dlg\image.aardio");
+tbs.loadForm(3,"\dlg\getdata.aardio");
+tbs.loadForm(4,"\dlg\pledge.aardio");
 
 //配置文件（抵押类型及所用的文件/res/static.table）
 var static_config=fsys.config("/res/").static;
@@ -83,25 +79,8 @@ var pledge_img_info=static_config.pledge_img_info;
 
 var autoBdc = py3.import("AutoBdc");
 
-//从配日文件读取上一次选取文件变量
-mainForm.edit_bowserpath.text=config.bdc.bowserpath;
-mainForm.edit_url.text=config.bdc.url;
+//从配置文件读取上一次选取文件变量
 mainForm.edit_selectFile.text=config.bdc.selectFileUrl
-
-//初始化按钮
-mainForm.button_firstRun.oncommand = function(id,event){
-	autoBdc.firstRun();
-	mainForm.edit_info.print('初始化完成');
-}
-
-//启动浏览器按钮
-mainForm.button_openBrowser.oncommand = function(id,event){
-	autoBdc.bowserpath=mainForm.edit_bowserpath.text;
-	config.bdc.bowserpath=mainForm.edit_bowserpath.text;
-	config.bdc.url=mainForm.edit_url.text;
-	autoBdc.openbowser(mainForm.edit_bowserpath.text,mainForm.edit_url.text);
-	mainForm.edit_info.print('浏览器已启动');
-}
 
 //存量房业务按钮
 mainForm.button3.oncommand = function(id,event){
