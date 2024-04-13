@@ -4,8 +4,9 @@ import config;
 import fsys;
 import fsys.dlg;
 import fsys.config;
-//OCR库
-import tesseract;
+import py3;
+import console;
+import process.python;
 
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
@@ -35,6 +36,12 @@ static2={cls="static";text="图片所在路径：";left=285;top=34;right=380;bot
 )
 /*}}*/
 
+//D:\anaconda3\envs\python38\python.exe
+process.python.path = "D:\anaconda3\envs\python38\python.exe"
+//python变量
+//var sortOCR=py3.import("SortOCR");
+
+var sortOCR=process.python.exec("/py/SortOCR.py");
 //配置文件（抵押类型及所用的文件/res/static.table）
 var static_config=fsys.config("/res/").static;
 var pledge_type=static_config.pledge_type;
@@ -140,7 +147,7 @@ winform.button_GD.oncommand = function(id,event){
 //OCR客户证件
 winform.button_ocr.oncommand = function(id,event){
 	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	
+	console.log(sortOCR.OCR_Persons(winform.edit_selectFile.text));
 }
 
 winform.show();

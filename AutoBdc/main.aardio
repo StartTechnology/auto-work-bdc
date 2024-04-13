@@ -36,13 +36,6 @@ tbs.skin({
 
 })
 
-import py3;
-import config;
-import console;
-import fsys;
-import fsys.dlg;
-import fsys.config;
-
 //选项卡绑定窗口
 tbs.loadForm(1,"\dlg\start.aardio" );
 tbs.loadForm(2,"\dlg\image.aardio");

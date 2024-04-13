@@ -6,7 +6,7 @@ import re
 from rapidocr_onnxruntime import RapidOCR
 
 
-img_path=r"C:\Users\LCY\AppData\Roaming\SPB_Data\gitee\auto-work\文档及测试数据\彭祥华 刘冬风\IMG_0003.jpg"
+img_path=r"C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息"
 img_path1=r"C:\Users\LCY\AppData\Roaming\SPB_Data\gitee\auto-work\文档及测试数据\李萍华 刘为龙\IMG_0004.jpg"
 img_path2=r"C:\Users\LCY\AppData\Roaming\SPB_Data\gitee\auto-work\文档及测试数据\郭丽华 刘桂根\IMG_0004.jpg"
 class Person:
@@ -89,13 +89,7 @@ def find_name_index(result):
         _index.append(find_nearest_coordinate(result, i,3,0))
     return _index
 
-#0,3
-# for i in range(0,4):
-#     #_i=find_nearest_coordinate(result, 20, i, 0)
-#     _i=find_nearest_coordinate(result, 0, i, 0)
-#     print(i,result[_i][1])
-result=OCRImg(img_path)
-
+#返回客户信息方法，参数传入OCR结果
 def getPersons(result):
     _persons=[]
     str_list_id=find_ID_index(result)
@@ -114,8 +108,15 @@ def getPersons(result):
             _persons.append(Person(result[_n_i][1],result[_i][1]))
     return _persons
 
-persons=getPersons(result)
-for i in persons:
-    print(i)
+#OCR客户信息，传入参数客户身份证文件夹，返回结果Person对象列表
+def OCR_Persons(img_path):
+    #return os.listdir(img_path)
+    _persons=[]
+    for _img_path in os.listdir(img_path):
+        _result=OCRImg(os.path.join(img_path,_img_path))
+        _persons.extend(getPersons(_result))
+    return _persons
 
-# print(time.strftime("%Y%m%d", time.localtime()))
+# per=OCR_Persons(img_path)
+# for i in per:
+#     print(i)
