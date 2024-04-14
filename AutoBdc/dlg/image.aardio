@@ -1,17 +1,14 @@
-
 import win.ui;
 import config;
 import fsys;
 import fsys.dlg;
 import fsys.config;
-import py3;
 import console;
-import process.python;
-
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
 button_GD={cls="button";text="影像归档";left=34;top=299;right=170;bottom=334;disabled=1;z=19};
+button_newperson={cls="button";text="新增";left=634;top=362;right=710;bottom=386;z=25};
 button_ocr={cls="button";text="OCR客户证件";left=34;top=240;right=291;bottom=278;z=22};
 button_selectfile={cls="button";text="选择文件";left=30;top=172;right=326;bottom=207;ah=1;aw=1;disabled=1;z=2};
 checkbox1={cls="checkbox";text="不动产登记申请书";left=28;top=91;right=157;bottom=111;ah=1;aw=1;disabled=1;group=1;z=6};
@@ -28,20 +25,20 @@ checkbox7={cls="checkbox";text="房产证";left=30;top=119;right=100;bottom=139;
 checkbox8={cls="checkbox";text="借款合同";left=104;top=119;right=185;bottom=139;ah=1;aw=1;disabled=1;group=1;z=14};
 checkbox9={cls="checkbox";text="抵押合同";left=188;top=119;right=267;bottom=139;ah=1;aw=1;disabled=1;group=1;z=15};
 combobox_pledgetype={cls="combobox";left=119;top=29;right=234;bottom=55;ah=1;aw=1;edge=1;items={};mode="dropdown";z=4};
-edit_name={cls="edit";text="客户姓名";left=192;top=309;right=311;bottom=333;edge=1;z=20};
+edit_id={cls="edit";text="身份证号";left=508;top=362;right=614;bottom=386;edge=1;z=24};
+edit_name={cls="edit";text="客户姓名";left=375;top=362;right=481;bottom=386;edge=1;z=20};
 edit_selectFile={cls="edit";text="图片文件夹";left=391;top=27;right=644;bottom=55;ah=1;aw=1;edge=1;multiline=1;z=3};
 groupbox={cls="groupbox";text="所需影像";left=8;top=72;right=827;bottom=147;ah=1;aw=1;edge=1;group=1;z=1};
+listview_persons={cls="listview";left=374;top=172;right=702;bottom=346;edge=1;z=23};
 static={cls="static";text="请选择业务类型:";left=11;top=32;right=116;bottom=60;ah=1;aw=1;transparent=1;z=5};
 static2={cls="static";text="图片所在路径：";left=285;top=34;right=380;bottom=58;transparent=1;z=21}
 )
 /*}}*/
 
-//D:\anaconda3\envs\python38\python.exe
-process.python.path = "D:\anaconda3\envs\python38\python.exe"
-//python变量
-//var sortOCR=py3.import("SortOCR");
+import process.wxOcr;
+var ocr = process.wxOcr();
 
-var sortOCR=process.python.exec("/py/SortOCR.py");
+//var sortOCR=process.python.exec("/py/SortOCR.py");
 //配置文件（抵押类型及所用的文件/res/static.table）
 var static_config=fsys.config("/res/").static;
 var pledge_type=static_config.pledge_type;
@@ -144,10 +141,53 @@ winform.button_GD.oncommand = function(id,event){
 	//console.dump(a);
 }
 
+//客户信息list_view窗口控件设计
+import win.ui.grid;
+var grid = win.ui.grid(winform.listview_persons);
+grid.setColumns({"姓名";"身份证号"})
+var datatable={fields={[1]="name";[2]="id"};}
+//table.push(datatable,{name="李1";id="36242519980201215X"});
+grid.setTable(datatable);
+
+//右键点击列表项触发此事件
+winform.listview_persons.onRightClick = function(item,subItem,nmListView){
+	winform.popmenu.popup();//弹出菜单
+}
+//创建弹出菜单
+winform.popmenu = win.ui.popmenu(winform);
+winform.popmenu.add('删除',function(id){
+	//在下面输入菜单响应代码
+	table.remove(datatable,winform.listview_persons.selIndex);
+	grid.setTable(datatable);	
+});
+
+//编辑变更值会触发下面的事件
+grid.onEditChanged = function(text,iItem,iSubItem){
+	var name = datatable.fields[iSubItem];
+	datatable[iItem][name] = text;
+}
+
+
 //OCR客户证件
 winform.button_ocr.oncommand = function(id,event){
 	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	console.log(sortOCR.OCR_Persons(winform.edit_selectFile.text));
+	//console.log(sortOCR.OCR_Persons(winform.edit_selectFile.text));
+	
+	ocr.sendRquest("C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息\IMG_0003.jpg",function(mmojoOcrresponse){
+		var _result=mmojoOcrresponse.ocrResult.singleResult;
+		
+		for(k,line in _result){
+			console.log(line.singleStrUtf8);
+		}
+	}
+	);
+
+}
+
+//给grid新增数据到末尾
+winform.button_newperson.oncommand = function(id,event){
+	table.push(datatable,{name=winform.edit_name.text;id=winform.edit_id.text});
+	grid.setTable(datatable);
 }
 
 winform.show();

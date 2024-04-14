@@ -117,6 +117,4 @@ def OCR_Persons(img_path):
         _persons.extend(getPersons(_result))
     return _persons
 
-# per=OCR_Persons(img_path)
-# for i in per:
-#     print(i)
+#该方案已完成，但rappidocr不支持32位python环境，废弃
