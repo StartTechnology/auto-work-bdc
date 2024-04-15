@@ -221,7 +221,7 @@ function distance(x_points,y_points){
 	else {
 		var sum_distance=0;
 		for(i=1;#x_points;1){
-			sum_distance=sum_distance+(x_points[i]-y_y_points[i])**2;
+			sum_distance=sum_distance+(x_points[i]-y_points[i])**2;
 		}
 		return math.sqrt(sum_distance); 
 	}
@@ -232,13 +232,38 @@ function distance(x_points,y_points){
 //OCR客户证件
 winform.button_ocr.oncommand = function(id,event){
 	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	var img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息\IMG_0003.jpg";
+	var img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息\IMG_0004.jpg";
 	ocr_result=ocr.detectImage(img_path);
 	ocr_blocks_result=ocr_result.blocks;
-	console.dump(getStringIndexs(ocr_blocks_result,"民(.)族"));
-	for(i=1;#ocr_blocks_result;1){
-		//console.dump(ocr_blocks_result[i].points,ocr_blocks_result[i].text);
+	console.dump(getStringIndexs(ocr_blocks_result,"(.)民(.)族(.)"));//坐标点 2 3 //2，4
+	console.dump(ocr_result.text);
 	
+	for(i=1;4;1)
+	{
+		var x_point={ocr_blocks_result[3].points[i].x;ocr_blocks_result[3].points[i].y};
+		var y = 0;
+		var _z=0;
+		var _distance=9999999;
+		for(j=1;4;1){
+
+			for(z=1;#ocr_blocks_result;1)
+			{
+				if(z=3)
+				{
+					continue;
+				}
+				var y_point={ocr_blocks_result[z].points[j].x;ocr_blocks_result[z].points[j].y};
+				if(distance(x_point,y_point)<_distance)
+				{
+					y=j;
+					_distance=distance(x_point,y_point);
+					_z=z;
+				}
+			}
+			console.log("x,y,z",i,j,_z)
+			console.dump(_distance,ocr_blocks_result[_z].text);
+		}
+		
 	}
 	
 /*
