@@ -1,9 +1,14 @@
 import win.ui;
+import console;
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add()
 /*}}*/
 
+//var s="123ab456ab789ab";
+//console.dump(string.split(s,"<ab>"));
+import time;
+console.log(time(time.now(),"%Y%m%d"));
 winform.show();
 win.loopMessage();
 return winform;

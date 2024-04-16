@@ -5,12 +5,13 @@ import fsys.dlg;
 import fsys.config;
 import console;
 import math;
+import time;
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
-button_GD={cls="button";text="影像归档";left=34;top=299;right=170;bottom=334;disabled=1;z=19};
+button_GD={cls="button";text="影像归档";left=34;top=302;right=170;bottom=337;z=19};
 button_newperson={cls="button";text="新增";left=634;top=362;right=710;bottom=386;z=25};
-button_ocr={cls="button";text="OCR客户证件";left=34;top=240;right=291;bottom=278;z=22};
+button_ocr={cls="button";text="OCR客户证件";left=34;top=240;right=291;bottom=278;disabled=1;z=22};
 button_selectfile={cls="button";text="选择文件";left=30;top=172;right=326;bottom=207;ah=1;aw=1;disabled=1;z=2};
 checkbox1={cls="checkbox";text="不动产登记申请书";left=28;top=91;right=157;bottom=111;ah=1;aw=1;disabled=1;group=1;z=6};
 checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=266;top=119;right=423;bottom=139;ah=1;aw=1;disabled=1;group=1;z=16};
@@ -77,7 +78,8 @@ winform.combobox_pledgetype.onOk  = function(id,event){
 	select_img_count=#checkbox_items;
 	winform.button_selectfile.text="请选择"+pledge_imgtype[checkbox_items[#checkbox_items-select_img_count+1]]+"影像";
 	winform.button_selectfile.disabled=false;
-	winform.button_GD.disabled=true;
+	//winform.button_GD.disabled=true;
+	winform.button_ocr.disabled=true;
 }
 
 
@@ -114,6 +116,7 @@ winform.button_selectfile.oncommand = function(id,event){
 		owner.disabled=true;
 		owner.text="图片选择完成";
 		winform.button_GD.disabled=false;
+		winform.button_ocr.disabled=false;
 	}
 	else {
 		owner.disabled=false;
@@ -123,30 +126,11 @@ winform.button_selectfile.oncommand = function(id,event){
 }
 
 
-//影像归档
-winform.button_GD.oncommand = function(id,event){
-	
-	fsys.enum("D:\aardio\config", "*.*",
-		function(dir,filename,fullpath,findData){ 
-			if(filename){ 
-	           	console.log("发现文件："+filename,"完整路径："+fullpath,"当前目录完整路径"+dir)
-	           	
-			}
-			else{
-				console.log( "发现目录，目录名称（非完整路径）：" + dir,"完整路径："+fullpath )
-			}
-		} 
-		,false/*如果此参数为false则忽略子目录*/
-	);
-	//a=fsys.list("D:\aardio\config");
-	//console.dump(a);
-}
-
 //客户信息list_view窗口控件设计
 import win.ui.grid;
 var grid = win.ui.grid(winform.listview_persons);
 grid.setColumns({"姓名";"身份证号"})
-var datatable={fields={[1]="name";[2]="id"};}
+datatable={fields={[1]="name";[2]="id"};}
 //table.push(datatable,{name="李1";id="36242519980201215X"});
 grid.setTable(datatable);
 
@@ -170,7 +154,7 @@ grid.onEditChanged = function(text,iItem,iSubItem){
 
 
 
-//从ocr结果的blocks属性获取客户身份证号index
+//从ocr结果的blocks属性获取客户身份证号index(替换Xx后全部为数字且大于10位数)
 function getIdIndexs(ocr_blocks_result){
 	var id_indexs={};
 	for(i=1;#ocr_blocks_result;1){
@@ -194,25 +178,6 @@ function getIdIndexs(ocr_blocks_result){
 	return id_indexs; 
 }
 
-
-//从ocr结果的blocks属性获取客户姓名index
-function getNameIndexs(ocr_blocks_result){
-	var name_indexs={};
-	
-	return name_indexs; 
-}
-
-//获取结果中含有字符的标
-function getStringIndexs(ocr_blocks_result,_string){
-	var string_indexs={};
-	for(i=1;#ocr_blocks_result;1){
-		if(string.find(ocr_blocks_result[i].text,_string))
-		{
-			table.push(string_indexs,i);
-		}
-	}
-	return string_indexs; 
-}
 //获取两个点之间的距离
 function distance(x_points,y_points){
 	if(#x_points!=#y_points){
@@ -225,55 +190,85 @@ function distance(x_points,y_points){
 		}
 		return math.sqrt(sum_distance); 
 	}
-	
+}
+
+//从ocr结果的blocks属性获取客户姓名index（与客户身份证号块在1000范围内距离最远的块）
+function getNameIndex(ocr_blocks_result,idIndexs){
+	var name_indexs=0;
+	var _dis=0;
+	var x_points={ocr_blocks_result[idIndexs].points[1].x;ocr_blocks_result[idIndexs].points[1].y};
+	for(i=1;#ocr_blocks_result;1){
+		if(i==idIndexs){continue;}
+		var y_points={ocr_blocks_result[i].points[1].x;ocr_blocks_result[i].points[1].y};
+		var _d=distance(x_points,y_points);
+		if(_d<1000 and _d>_dis){
+			_dis=_d;
+			name_indexs = i;
+		}
+	}
+	return name_indexs; 
+}
+
+//格式化客户姓名
+function format_name(_name)
+{
+	//去除首尾空白字符
+	_name=string.trim(_name);
+	//用空格拆分字符串，取末尾字符串内容
+	var _n=string.split(_name," ");
+	_name=_n[#_n];
+	//用空字符串替换“姓名”
+	_name=string.replace(_name,"姓名","");
+	return _name; 
+}
+
+//格式化客户证件号码
+function format_id(_id)
+{
+	//去除首尾空白字符
+	_id=string.trim(_id);
+	//用空格拆分字符串，取末尾字符串内容
+	var _i=string.split(_id," ");
+	_id=_i[#_i];
+	//用"号码"拆分字符串，取末尾字符串内容
+	_i=string.split(_id,"<号码>");
+	_id=_i[#_i];
+	//用“0”字符串替换“Q”
+	_id=string.replace(_id,"Q","0");
+	//将小写x替换为大写X
+	_id=string.replace(_id,"x","X");
+	return _id; 
 }
 
 
 //OCR客户证件
 winform.button_ocr.oncommand = function(id,event){
-	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	var img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息\IMG_0004.jpg";
-	ocr_result=ocr.detectImage(img_path);
-	ocr_blocks_result=ocr_result.blocks;
-	console.dump(getStringIndexs(ocr_blocks_result,"(.)民(.)族(.)"));//坐标点 2 3 //2，4
-	console.dump(ocr_result.text);
 	
-	for(i=1;4;1)
-	{
-		var x_point={ocr_blocks_result[3].points[i].x;ocr_blocks_result[3].points[i].y};
-		var y = 0;
-		var _z=0;
-		var _distance=9999999;
-		for(j=1;4;1){
-
-			for(z=1;#ocr_blocks_result;1)
-			{
-				if(z=3)
+	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
+	//var img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息";
+	fsys.enum(id_img_path, "*.*",
+		function(dir,filename,fullpath,findData){ 
+			if(filename){ 
+	           	//console.log("发现文件："+filename,"完整路径："+fullpath,"当前目录完整路径"+dir)
+	           	ocr_result=ocr.detectImage(fullpath);
+				ocr_blocks_result=ocr_result.blocks;
+				id_indexs=getIdIndexs(ocr_blocks_result);
+				for(i=1;#id_indexs;1)
 				{
-					continue;
-				}
-				var y_point={ocr_blocks_result[z].points[j].x;ocr_blocks_result[z].points[j].y};
-				if(distance(x_point,y_point)<_distance)
-				{
-					y=j;
-					_distance=distance(x_point,y_point);
-					_z=z;
+					index_name=getNameIndex(ocr_blocks_result,id_indexs[i]);
+					//console.dump("姓名",format_name(ocr_blocks_result[index_name].text));
+					//console.dump("身份证号",format_id(ocr_blocks_result[id_indexs[i]].text));
+					table.push(datatable,{name=format_name(ocr_blocks_result[index_name].text);id=format_id(ocr_blocks_result[id_indexs[i]].text)});
 				}
 			}
-			console.log("x,y,z",i,j,_z)
-			console.dump(_distance,ocr_blocks_result[_z].text);
-		}
-		
-	}
-	
-/*
-	id_indexs=getIdIndexs(ocr_blocks_result);
-	for(i=1;#id_indexs;1){
-		console.dump("身份证号",ocr_blocks_result[id_indexs[i]].text);
-	}	
-*/
 
+		}
+		,false/*如果此参数为false则忽略子目录*/
+	);
+	
+	grid.setTable(datatable);
 }
+
 
 //给grid新增数据到末尾
 winform.button_newperson.oncommand = function(id,event){
@@ -281,7 +276,26 @@ winform.button_newperson.oncommand = function(id,event){
 	grid.setTable(datatable);
 }
 
+//影像归档
+winform.button_GD.oncommand = function(id,event){
+	var GD_path=io.joinpath(winform.edit_selectFile.text,"..",pledge_type[winform.combobox_pledgetype.selIndex],time(time.now(),"%Y%m%d"));
+	var dir_name="";
+	for(i=1;#datatable;1){
+		dir_name=dir_name+" "+datatable[i].name;
+	}
+	dir_name=string.trim(dir_name);
+	var GD_path_name=io.joinpath(GD_path,dir_name);
+	if(!io.exist(GD_path_name)){
+		io.createDir(GD_path_name);
+	}
+	fsys.enum(winform.edit_selectFile.text, "*.*",
+		function(dir,filename,fullpath,findData){ 
+			fsys.move(fullpath,GD_path_name);
+		} 
+		,false/*如果此参数为false则忽略子目录*/
+	);
 
+}
 
 winform.show();
 win.loopMessage();
