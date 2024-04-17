@@ -16,6 +16,56 @@ nav_start={cls="plus";text="初始化";left=101;top=5;right=213;bottom=42;align=
 )
 /*}}*/
 
+//储存客户信息类
+class Person{
+	name;
+	id;
+	phone;
+/*
+	getName=function(){
+		return this.name; 
+	}
+	getId=function(){
+		return this.id; 
+	}
+	getPhone=function(){
+		return phone; 
+	}
+	setName=function(name){
+		this.name=name;
+	}
+	setPhone=function(phone){
+		this.phone=phone;
+	}
+	setId=function(id){
+		this.id=id;
+	}
+*/
+}
+
+//储存抵押信息的类
+class PledgeInfo{
+	//储存客户信息的table
+	persons={};
+	//储存客户影像文件的路径
+	image_path;
+	pldege_type;
+	start_time;
+	end_time;
+	
+}
+
+
+pledge_info=PledgeInfo();
+
+
+
+
+
+
+
+
+
 var tbs = win.ui.tabs(mainForm.nav_start,mainForm.nav_img,mainForm.nav_getdata,mainForm.nav_pledge);
 //所有选项卡样式
 tbs.skin({

@@ -10,8 +10,8 @@ import time;
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
 button_GD={cls="button";text="影像归档";left=34;top=302;right=170;bottom=337;z=19};
-button_newperson={cls="button";text="新增";left=634;top=362;right=710;bottom=386;z=25};
-button_ocr={cls="button";text="OCR客户证件";left=34;top=240;right=291;bottom=278;disabled=1;z=22};
+button_newperson={cls="button";text="新增";left=708;top=362;right=784;bottom=386;z=25};
+button_ocr={cls="button";text="OCR客户证件";left=34;top=240;right=291;bottom=278;z=22};
 button_selectfile={cls="button";text="选择文件";left=30;top=172;right=326;bottom=207;ah=1;aw=1;disabled=1;z=2};
 checkbox1={cls="checkbox";text="不动产登记申请书";left=28;top=91;right=157;bottom=111;ah=1;aw=1;disabled=1;group=1;z=6};
 checkbox10={cls="checkbox";text="不动产抵押权注销证明";left=266;top=119;right=423;bottom=139;ah=1;aw=1;disabled=1;group=1;z=16};
@@ -27,8 +27,9 @@ checkbox7={cls="checkbox";text="房产证";left=30;top=119;right=100;bottom=139;
 checkbox8={cls="checkbox";text="借款合同";left=104;top=119;right=185;bottom=139;ah=1;aw=1;disabled=1;group=1;z=14};
 checkbox9={cls="checkbox";text="抵押合同";left=188;top=119;right=267;bottom=139;ah=1;aw=1;disabled=1;group=1;z=15};
 combobox_pledgetype={cls="combobox";left=119;top=29;right=234;bottom=55;ah=1;aw=1;edge=1;items={};mode="dropdown";z=4};
-edit_id={cls="edit";text="身份证号";left=508;top=362;right=614;bottom=386;edge=1;z=24};
-edit_name={cls="edit";text="客户姓名";left=375;top=362;right=481;bottom=386;edge=1;z=20};
+edit_id={cls="edit";text="身份证号";left=472;top=362;right=578;bottom=386;edge=1;z=24};
+edit_name={cls="edit";text="客户姓名";left=375;top=362;right=462;bottom=386;edge=1;z=20};
+edit_phone={cls="edit";text="电话号码";left=587;top=362;right=693;bottom=386;edge=1;z=26};
 edit_selectFile={cls="edit";text="图片文件夹";left=391;top=27;right=644;bottom=55;ah=1;aw=1;edge=1;multiline=1;z=3};
 groupbox={cls="groupbox";text="所需影像";left=8;top=72;right=827;bottom=147;ah=1;aw=1;edge=1;group=1;z=1};
 listview_persons={cls="listview";left=374;top=172;right=702;bottom=346;edge=1;z=23};
@@ -129,8 +130,8 @@ winform.button_selectfile.oncommand = function(id,event){
 //客户信息list_view窗口控件设计
 import win.ui.grid;
 var grid = win.ui.grid(winform.listview_persons);
-grid.setColumns({"姓名";"身份证号"})
-datatable={fields={[1]="name";[2]="id"};}
+grid.setColumns({"姓名";"身份证号";"电话号码"})
+datatable={fields={[1]="name";[2]="id";[3]="phone"};}
 //table.push(datatable,{name="李1";id="36242519980201215X"});
 grid.setTable(datatable);
 
@@ -219,6 +220,11 @@ function format_name(_name)
 	_name=_n[#_n];
 	//用空字符串替换“姓名”
 	_name=string.replace(_name,"姓名","");
+	//客户姓名大于4则用名拆分数组
+	if(#_name>4){
+		_n=string.split(_name,"<名>");
+		_name=_n[#_n];
+	}
 	return _name; 
 }
 
@@ -245,7 +251,7 @@ function format_id(_id)
 winform.button_ocr.oncommand = function(id,event){
 	
 	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	//var img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息";
+	var id_img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息";
 	fsys.enum(id_img_path, "*.*",
 		function(dir,filename,fullpath,findData){ 
 			if(filename){ 
@@ -267,24 +273,28 @@ winform.button_ocr.oncommand = function(id,event){
 	);
 	
 	grid.setTable(datatable);
+	
+	mainForm.edit_info.print("OCR完成");
 }
 
 
 //给grid新增数据到末尾
 winform.button_newperson.oncommand = function(id,event){
-	table.push(datatable,{name=winform.edit_name.text;id=winform.edit_id.text});
+	table.push(datatable,{name=winform.edit_name.text;id=winform.edit_id.text;phone=winform.edit_phone.text});
 	grid.setTable(datatable);
 }
 
 //影像归档
 winform.button_GD.oncommand = function(id,event){
-	var GD_path=io.joinpath(winform.edit_selectFile.text,"..",pledge_type[winform.combobox_pledgetype.selIndex],time(time.now(),"%Y%m%d"));
+	var GD_path=io.joinpath(winform.edit_selectFile.text,"..",pledge_type[winform.combobox_pledgetype.selIndex],tostring(time(time.now(),"%Y%m%d")));
 	var dir_name="";
 	for(i=1;#datatable;1){
 		dir_name=dir_name+" "+datatable[i].name;
 	}
 	dir_name=string.trim(dir_name);
 	var GD_path_name=io.joinpath(GD_path,dir_name);
+	
+
 	if(!io.exist(GD_path_name)){
 		io.createDir(GD_path_name);
 	}
@@ -295,6 +305,23 @@ winform.button_GD.oncommand = function(id,event){
 		,false/*如果此参数为false则忽略子目录*/
 	);
 
+
+	for(i=1;#datatable;1){
+		var _d=table.pop(datatable);
+		var person=Person();
+		person.name=_d.name);
+		person.id=_d.id;
+		person.phone=_d.phone;
+		table.push(pledge_info.persons,person);
+	}
+	
+	pledge_info.image_path=GD_path_name;
+	pledge_info.pldege_type=pledge_type[winform.combobox_pledgetype.selIndex];
+	
+	grid.setTable(datatable);
+	winform.combobox_pledgetype.selIndex=null;
+	
+	mainForm.edit_info.print("影像归档完成");
 }
 
 winform.show();

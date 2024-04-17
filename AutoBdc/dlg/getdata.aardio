@@ -1,14 +1,30 @@
 import win.ui;
 import console;
+import config;
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
-winform.add()
+winform.add(
+button={cls="button";text="数据写入台账";left=257;top=122;right=443;bottom=163;z=1};
+edit_database_excel={cls="edit";text="Edit";left=257;top=45;right=562;bottom=75;edge=1;multiline=1;z=2};
+static={cls="static";text="台账路径";left=154;top=54;right=228;bottom=76;transparent=1;z=3}
+)
 /*}}*/
 
-//var s="123ab456ab789ab";
-//console.dump(string.split(s,"<ab>"));
+/*
 import time;
 console.log(time(time.now(),"%Y%m%d"));
+*/
+
+
+winform.edit_database_excel.text=config.database.excel_url;
+winform.button.oncommand = function(id,event){
+	config.database.excel_url=winform.edit_database_excel.text;
+}
+
+
+
+
+
 winform.show();
 win.loopMessage();
 return winform;
