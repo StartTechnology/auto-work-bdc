@@ -6,6 +6,7 @@ import config;
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
 button={cls="button";text="存量房数据写入台账";left=257;top=122;right=443;bottom=163;z=1};
+button2={cls="button";text="test";left=530;top=132;right=654;bottom=159;z=4};
 edit_database_excel={cls="edit";text="Edit";left=257;top=45;right=562;bottom=75;edge=1;multiline=1;z=2};
 static={cls="static";text="台账路径";left=154;top=54;right=228;bottom=76;transparent=1;z=3}
 )
@@ -17,8 +18,10 @@ console.log(time(time.now(),"%Y%m%d"));
 */
 
 var excel =com.excel();
+/*
 excel.Visible =true;
 excel.Application.ScreenUpdating=true;
+*/
 
 winform.edit_database_excel.text=config.database.excel_url;
 winform.button.oncommand = function(id,event){
@@ -40,9 +43,10 @@ winform.button.oncommand = function(id,event){
 	excel.Save();
 }
 
-
-
-
+winform.button2.oncommand = function(id,event){
+	var path=winform.edit_database_excel.text;
+	console.log(io.splitpath(path).dir);
+}
 
 winform.show();
 win.loopMessage();

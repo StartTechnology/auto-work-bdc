@@ -4,7 +4,7 @@ Created on Sat Mar  9 12:54:33 2024
 
 @author: LCY
 """
-
+import os
 import pandas as pd
 import DrissionPage
 import re
@@ -187,11 +187,80 @@ def selectBusinessType(plinfo,port=9222):
 
     return 0
 
+#挨个上传影像避免卡死
+def up_img_onebyone(file,ele):
+    for i in file:
+        ele.click.to_upload(i)
+        ele.wait(0.3)
+    return 1
+#上传影像
+def upImage(image_path,tab):
+    
+    if image_path=="":
+        return 1
+    else:
+        tab_img=tab.ele("tag=div@@class:annex_box")
+        for i in os.listdir(image_path):
+            image_path_dir=os.path.join(image_path,i)
+            file_list=[]
+            if os.path.isdir(image_path_dir):
+                files=os.listdir(image_path_dir)
+                for i_img in files:
+                    image_path_dir_file=os.path.join(image_path_dir,i_img)
+                    if os.path.isfile(image_path_dir_file):
+                        file_list.append(image_path_dir_file)
+                        pass
+                    pass
+                #上传文件
+                if(len(file_list)==0):return 0
+                
+                if "不动产登记申请书" == i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():不动产登记申请书").ele("tag=div@@class:el-upload--text"))
+                elif "不动产抵押登记询问笔录"==i:
+                    #tab_img.ele("tag=li@@text():询问笔录").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():询问笔录").ele("tag=div@@class:el-upload--text"))
+                elif "申请人身份证明"==i:
+                    #tab_img.ele("tag=li@@text():申请人身份证明").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():申请人身份证明").ele("tag=div@@class:el-upload--text"))
+                elif "委托函"==i:                    
+                    #tab_img.ele("tag=li@@text():委托函").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():委托函").ele("tag=div@@class:el-upload--text"))
+                elif "商品房预售合同"==i:
+                    #tab_img.ele("tag=li@@text():预售合同").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():预售合同").ele("tag=div@@class:el-upload--text"))
+                elif "不动产登记证明"==i:
+                    #tab_img.ele("tag=li@@text():不动产登记证明").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():不动产登记证明").ele("tag=div@@class:el-upload--text"))
+                elif "借款合同"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@|text():个人授信合同@|text():借款合同@|text():主债权合同").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@|text():个人授信合同@|text():借款合同@|text():主债权合同").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                elif "房产证"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():不动产权证书").ele("tag=div@@class:el-upload--text"))
+                elif "抵押合同"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():抵押合同").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@@text():抵押合同").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                elif "不动产抵押权注销证明"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():注销证明").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@@text():注销证明").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                elif "关于抵押预告登记的约定"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():约定").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@@text():约定").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                elif "结婚证或具结保证书"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():结婚证或具结保证书").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@@text():结婚证或具结保证书").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                elif "其他"==i:
+                    up_img_onebyone(file_list,tab_img.ele("tag=li@@text():其他").ele("tag=div@@class:el-upload--text"))
+                    #tab_img.ele("tag=li@@text():其他").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
+                    pass
+                tab.wait(0.5)
+                pass
+        
 #业务界面
-def businessInput(plinfo,port=9222):
+def businessInput(plinfo,image_path="",port=9222):
     page=initPage(port)
     tab=page.get_tab(page.find_tabs(url='jabdc'))
     if plinfo.type=='解押' or plinfo.type=='预告解押':
+        upImage(image_path,tab)
         return 1
     elif plinfo.type=='预告抵押登记':
         #预告业务界面
@@ -222,6 +291,7 @@ def businessInput(plinfo,port=9222):
         _ele.wait.hidden()
 
         tab.ele('text:银行合同编号').after('@placeholder:请输入合同编号').input(plinfo.contract)
+        upImage(image_path,tab)
         return 1
     elif plinfo.type=='转本登记（预告转正式）':
             
@@ -241,7 +311,7 @@ def businessInput(plinfo,port=9222):
             inputs[2].input(plinfo.contract)
             inputs[8].click()
             tab.ele('tag=li@@class:el-select-dropdown__item@@text()=1').click()
-            
+            upImage(image_path,tab)
             return 1
 
     #添加抵押人信息
@@ -283,10 +353,18 @@ def businessInput(plinfo,port=9222):
     inputs[3].click()
     tab.ele('tag=li@@class:el-select-dropdown__item@@text()=1').click()
     inputs[4].input(plinfo.contract)
-    
+    upImage(image_path,tab)
     return 1
 
 
+def codetest(port=9222):
+    page=initPage(port)
+    tab=page.get_tab(page.find_tabs(url='jabdc'))
+    image_path=r"C:\Users\dkzx\Desktop\Lcy-抵押登记\影像\解押\20240418\黄舒岚"
+    upImage(image_path,tab)
+    print("完成")
+
+#codetest()
 #print(PledgeInfo(creatClipboardData(),'预告'))
 #print(creatClipboardData().iloc[0][11])
 '''

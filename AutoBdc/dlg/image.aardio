@@ -251,7 +251,7 @@ function format_id(_id)
 winform.button_ocr.oncommand = function(id,event){
 	
 	var id_img_path=io.joinpath(winform.edit_selectFile.text,pledge_imgtype[3]);
-	var id_img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息";
+	//var id_img_path="C:\Users\LCY\gitee\auto-work\文档及测试数据\客户身份信息";
 	fsys.enum(id_img_path, "*.*",
 		function(dir,filename,fullpath,findData){ 
 			if(filename){ 
@@ -286,7 +286,8 @@ winform.button_newperson.oncommand = function(id,event){
 
 //影像归档
 winform.button_GD.oncommand = function(id,event){
-	var GD_path=io.joinpath(winform.edit_selectFile.text,"..",pledge_type[winform.combobox_pledgetype.selIndex],tostring(time(time.now(),"%Y%m%d")));
+	var GD_path=io.splitpath(winform.edit_selectFile.text).dir;
+	GD_path=io.joinpath(GD_path,pledge_type[winform.combobox_pledgetype.selIndex],tostring(time(time.now(),"%Y%m%d")));
 	var dir_name="";
 	for(i=1;#datatable;1){
 		dir_name=dir_name+" "+datatable[i].name;
@@ -309,7 +310,7 @@ winform.button_GD.oncommand = function(id,event){
 	for(i=1;#datatable;1){
 		var _d=table.pop(datatable);
 		var person=Person();
-		person.name=_d.name);
+		person.name=_d.name;
 		person.id=_d.id;
 		person.phone=_d.phone;
 		table.push(pledge_info.persons,person);
