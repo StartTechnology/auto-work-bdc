@@ -13,20 +13,32 @@ car:车贷
 #存量房抵押信息
 class DanBaoInfo:
     def __init__(self,_pd,_type=''):
-        if pd.isna(_pd.iloc[0][1]):
+
+        if _type=='car':
+            self.type='纸质权证'
+        elif pd.isna(_pd.iloc[0][1]):
             self.type='纸质权证'
         elif _pd.iloc[0][1]=='电子权证':
             self.type='电子权证'
         else:
             self.type='纸质权证'
+
         self.contract=_pd.iloc[0][2]
+
         if  _type=='house':
             self.name=_pd.iloc[0][6]
             self.certificates=_pd.iloc[0][7]
             self.certificates_type=_pd.iloc[0][8]
             self.money=_pd.iloc[0][9]
             self.stsartTime=_pd.iloc[0][10]
-            self.endTime=_pd.iloc[0][11]
+            self.endTime=None
+        elif _type=='car':
+            self.name=_pd.iloc[0][3]
+            self.certificates=_pd.iloc[0][7]
+            self.certificates_type='机动车登记证'
+            self.money=_pd.iloc[0][8]
+            self.stsartTime=_pd.iloc[0][9]
+            self.endTime=_pd.iloc[0][10]
         else:
             self.name=_pd.iloc[0][4]
             self.certificates=_pd.iloc[0][6]
@@ -180,11 +192,12 @@ def dataRuKu(data_info,port=9222):
     tab.ele('tag=input@@placeholder:请输入合同编号').input(data_info.contract)
     tab.ele('tag=button@@text():查询').click()
     
-    
-    tab.wait.ele_displayed(tab.ele('@@text()= 抵押登记 '))
-    tab.ele('@@text()= 抵押登记 ').click()
+    tab.wait.load_start()
+    #tab.wait.ele_displayed(tab.ele('tag=a@@text()= 抵押登记 '))
+    tab.ele('tag=a@@text()= 抵押登记 ').click()
 
     if data_info.type=='电子权证':
+        tab.wait.ele_displayed(tab.ele(f'@@text()={data_info.certificates}'))
         tab.ele(f'@@text()={data_info.certificates}').before('.el-checkbox').click()
         tab.ele('tag=button@@text()=电子权证入库').click()
         tab.wait.ele_displayed(tab.ele('@@text():入库吗'))
@@ -213,7 +226,7 @@ def dataRuKu(data_info,port=9222):
 #担保系统入库(多条信息)
 def dataRukus(list_data_info,port=9222):
     for _data_info in list_data_info:
-        dataRuKu(_data_info,port)
+        print(_data_info.name,dataRuKu(_data_info,port))
     return 1
 
 #dataPledges(creatClipboardData('house'),r'C:\Users\dkzx\Desktop\权证交接\20240327')
@@ -223,12 +236,15 @@ def dataRukus(list_data_info,port=9222):
 def codetest():
     page=initPage()
     tab=page.get_tab(page.find_tabs(title='担保管理系统'))
-    #data_info=creatClipboardData()[0]
-    tab.ele('tag=button@@text():发起入库').click()
+    #tab.wait.ele_displayed(tab.ele('tag=a@@text()= 抵押登记 '))
+    li=tab.eles('tag=a@@text()= 抵押登记 ')
+    for i in li:
+        print(i)
+#codetest()
 
 #dataRuKu(creatClipboardData('house')[0])
-file_path=r'C:\Users\dkzx\Desktop\权证交接\20240402'
-data_list=creatClipboardData()
+#file_path=r'C:\Users\dkzx\Desktop\权证交接\20240402'
+#data_list=creatClipboardData()
 #dataPledges(data_list,file_path)
 #dataRukus(data_list)
 #packageNo=dataRuKu(data_list[0])

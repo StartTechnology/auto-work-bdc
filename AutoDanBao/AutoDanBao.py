@@ -8,6 +8,7 @@ Created on Sat Mar  9 12:54:33 2024
 import subprocess
 from DrissionPage import ChromiumPage, ChromiumOptions
 import DanBao
+import OldDanBao
 import pandas.io.clipboard as cb
 
 # 第一次运行需要
@@ -55,8 +56,18 @@ def useY():
     page.wait.ele_displayed(page.ele('@text():请确认已放入凭证'))
     page.ele('@text():请确认已放入凭证').parent().child('@text():已放入').click()
 
-file_path=r'C:\Users\dkzx\Desktop\权证交接\20240402'
+
+
+file_path=r'C:\Users\dkzx\Desktop\权证交接\20240411'
+#_data=DanBao.creatClipboardData('house')
+_data=DanBao.creatClipboardData('car')
+#_data=DanBao.creatClipboardData()
+
 #openbowser()
-#DanBao.dataPledges(DanBao.creatClipboardData(),file_path)
-DanBao.dataPledges(DanBao.creatClipboardData('house'),file_path)
+#DanBao.dataPledges(_data,file_path)
+DanBao.dataRukus(_data)
 #useY()
+
+#car_data=OldDanBao.creatClipboardData()
+#OldDanBao.carPledges(car_data)
+#OldDanBao.carRuKus(car_data)
