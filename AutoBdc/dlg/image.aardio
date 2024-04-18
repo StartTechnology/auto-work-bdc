@@ -317,7 +317,7 @@ winform.button_GD.oncommand = function(id,event){
 	}
 	
 	pledge_info.image_path=GD_path_name;
-	pledge_info.pldege_type=pledge_type[winform.combobox_pledgetype.selIndex];
+	pledge_info.pldege_type=winform.combobox_pledgetype.selIndex;
 	
 	grid.setTable(datatable);
 	winform.combobox_pledgetype.selIndex=null;

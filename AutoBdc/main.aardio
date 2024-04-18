@@ -87,10 +87,10 @@ tbs.skin({
 })
 
 //选项卡绑定窗口
-tbs.loadForm(1,"\dlg\start.aardio" );
-tbs.loadForm(2,"\dlg\image.aardio");
-tbs.loadForm(3,"\dlg\getdata.aardio");
-tbs.loadForm(4,"\dlg\pledge.aardio");
+winform_strat=tbs.loadForm(1,"\dlg\start.aardio" );
+winform_image=tbs.loadForm(2,"\dlg\image.aardio");
+winfoem_getdata=tbs.loadForm(3,"\dlg\getdata.aardio");
+winform_pledge=tbs.loadForm(4,"\dlg\pledge.aardio");
 
 tbs.selIndex=1;
 

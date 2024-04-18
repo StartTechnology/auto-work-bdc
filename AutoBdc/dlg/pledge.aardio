@@ -33,7 +33,7 @@ winform.button2.oncommand = function(id,event){
 	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData(),'预告');
 	autoBdc.newBusiness();
 	autoBdc.selectBusinessType(data);
-	autoBdc.businessInput(data);
+	autoBdc.businessInput(data,image_path);
 	mainForm.edit_info.print('完成');
 }
 
