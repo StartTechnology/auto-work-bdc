@@ -31,7 +31,7 @@ class DanBaoInfo:
             self.certificates_type=_pd.iloc[0][8]
             self.money=_pd.iloc[0][9]
             self.stsartTime=_pd.iloc[0][10]
-            self.endTime=None
+            self.endTime=_pd.iloc[0][11]
         elif _type=='car':
             self.name=_pd.iloc[0][3]
             self.certificates=_pd.iloc[0][7]
