@@ -71,15 +71,19 @@ def dataPledge(data_info,dir_path,port=9222):
     
     page = initPage(port)
     tab=page.get_tab(page.find_tabs(title='担保管理系统'))
-
+    loan_type="出现错误"
     _title = tab.ele('tag=span@@text():首页@@class:tags-view-item').parent()
     if not _title.child('@@text():抵质押登记@@class:active'):
         if not tab.s_ele('@@role:menuitem@@text():权证管理@@class:is-opened'):
             tab.ele('@@role:menuitem@@text():权证管理').click()
         tab.ele('@@role:menuitem@@text()=抵质押登记').click()
     else:
-        if tab.ele('tag=button@@text()=返回'):
+        #if tab.ele('tag=button@@text()=返回'):
+        try:
             tab.ele('tag=button@@text()=返回').click()
+        except :
+            pass
+            #print("没找到返回键")
 
     tab.wait.ele_displayed(tab.ele('tag=input@@placeholder:请输入合同编号'))
     tab.ele('tag=input@@placeholder:请输入合同编号').input(data_info.contract)
@@ -96,6 +100,7 @@ def dataPledge(data_info,dir_path,port=9222):
     except:
         是否推送业务=False
         pass
+    loan_type=tab.ele('tag=td@@text():抵押登记').befores('tag=td')[3].text
     tab.ele('@@text()= 抵押登记 ').click()
 
     
@@ -166,12 +171,12 @@ def dataPledge(data_info,dir_path,port=9222):
     tab.wait.load_start()
     tab.ele('tag=button@@text()=返回').click()
 
-    return 1
+    return loan_type
 
 #担保系统录入抵押信息(多条信息)
 def dataPledges(list_data_info,dir_path,port=9222):
     for _data_info in list_data_info:
-        dataPledge(_data_info,dir_path,port)
+        print(_data_info.name,dataPledge(_data_info,dir_path,port))
     return 1
 
 #担保系统入库  返回封包编号
@@ -185,8 +190,11 @@ def dataRuKu(data_info,port=9222):
             tab.ele('@@role:menuitem@@text():权证管理').click()
         tab.ele('@@role:menuitem@@text()=抵质押登记').click()
     else:
-        if tab.ele('tag=button@@text()=返回'):
+        try:
             tab.ele('tag=button@@text()=返回').click()
+        except :
+            pass
+            #print("没找到返回键")
 
     tab.wait.ele_displayed(tab.ele('tag=input@@placeholder:请输入合同编号'))
     tab.ele('tag=input@@placeholder:请输入合同编号').input(data_info.contract)

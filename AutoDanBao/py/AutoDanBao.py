@@ -29,7 +29,6 @@ def openbowser(_bowserpath=bowserpath1,_url='https://22.230.88.182/login.html'):
     page.get(_url)
     return 0
 
-
 #点击自动化用印
 def useY():
     co = ChromiumOptions().set_local_port(9222)
@@ -57,21 +56,15 @@ def useY():
     page.ele('@text():请确认已放入凭证').parent().child('@text():已放入').click()
 
 
-#测试h函数
-def codetest():
-    a=[]
-    a.append(1)
-    a.append(2)
-    return a
-
-# file_path=r'C:\Users\dkzx\Desktop\权证交接\20240411'
-#_data=DanBao.creatClipboardData('house')
-# _data=DanBao.creatClipboardData('car')
-#_data=DanBao.creatClipboardData()
-
 #openbowser()
-#DanBao.dataPledges(_data,file_path)
-# DanBao.dataRukus(_data)
+
+file_path=r'C:\Users\dkzx\Desktop\权证交接\20240429'
+#_data=DanBao.creatClipboardData('house')
+#_data=DanBao.creatClipboardData('car')
+_data=DanBao.creatClipboardData()
+
+DanBao.dataPledges(_data,file_path)
+DanBao.dataRukus(_data)
 #useY()
 
 #car_data=OldDanBao.creatClipboardData()
