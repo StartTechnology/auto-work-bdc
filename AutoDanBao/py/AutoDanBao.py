@@ -58,13 +58,13 @@ def useY():
 
 #openbowser()
 
-file_path=r'C:\Users\dkzx\Desktop\权证交接\20240429'
-#_data=DanBao.creatClipboardData('house')
-#_data=DanBao.creatClipboardData('car')
-_data=DanBao.creatClipboardData()
+# file_path=r'C:\Users\dkzx\Desktop\权证交接\20240429'
+# #_data=DanBao.creatClipboardData('house')
+# #_data=DanBao.creatClipboardData('car')
+# _data=DanBao.creatClipboardData()
 
-DanBao.dataPledges(_data,file_path)
-DanBao.dataRukus(_data)
+# DanBao.dataPledges(_data,file_path)
+# DanBao.dataRukus(_data)
 #useY()
 
 #car_data=OldDanBao.creatClipboardData()

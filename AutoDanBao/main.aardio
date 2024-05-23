@@ -3,28 +3,47 @@ import console;
 /*DSG{{*/
 mainForm = win.form(text="担保系统自动录入";right=959;bottom=591)
 mainForm.add(
-button={cls="button";text="先登记再入库（从剪贴板）";left=532;top=280;right=716;bottom=331;z=12};
+button={cls="button";text="先登记再入库（从剪贴板）";left=548;top=244;right=732;bottom=295;z=11};
 button_openbroswer={cls="button";text="打开浏览器";left=73;top=74;right=223;bottom=110;z=1};
-button_pledge={cls="button";text="抵押登记（从剪贴板）";left=72;top=280;right=246;bottom=331;z=10};
-button_ruku={cls="button";text="封包入库（从剪贴板）";left=286;top=280;right=460;bottom=331;z=11};
-combobox_danbao_system={cls="combobox";left=75;top=194;right=238;bottom=220;edge=1;items={"新系统";"旧系统（汽车分期）"};mode="dropdown";z=8};
-combobox_type={cls="combobox";left=276;top=194;right=416;bottom=216;edge=1;items={"存量房";"房贷";"车贷";"汽车分期"};mode="dropdown";z=9};
+button_pledge={cls="button";text="抵押登记（从剪贴板）";left=88;top=244;right=262;bottom=295;z=9};
+button_ruku={cls="button";text="封包入库（从剪贴板）";left=302;top=244;right=476;bottom=295;z=10};
+combobox_type={cls="combobox";left=172;top=142;right=312;bottom=166;edge=1;items={"存量房";"房贷";"车贷"};mode="dropdown";z=8};
 edit_browser={cls="edit";text="Edit";left=163;top=28;right=436;bottom=55;edge=1;z=4};
-edit_file_path={cls="edit";text="Edit";left=247;top=138;right=599;bottom=164;edge=1;z=7};
-edit_info={cls="edit";text="Edit";left=73;top=398;right=792;bottom=527;edge=1;multiline=1;z=13};
-edit_url={cls="edit";text="Edit";left=576;top=30;right=822;bottom=55;edge=1;z=5};
+edit_file_path={cls="edit";text="Edit";left=451;top=86;right=803;bottom=112;edge=1;z=7};
+edit_info={cls="edit";text="Edit";left=73;top=398;right=792;bottom=527;edge=1;multiline=1;z=12};
+edit_url={cls="edit";text="Edit";left=554;top=29;right=800;bottom=54;edge=1;z=5};
 static={cls="static";text="浏览器地址";left=72;top=29;right=161;bottom=50;transparent=1;z=2};
 static2={cls="static";text="网址";left=493;top=33;right=550;bottom=51;transparent=1;z=3};
-static3={cls="static";text="上传文件所在文件夹路径";left=75;top=138;right=230;bottom=164;transparent=1;z=6}
+static3={cls="static";text="上传文件所在文件夹路径";left=279;top=86;right=434;bottom=112;transparent=1;z=6};
+static4={cls="static";text="押品类型";left=87;top=146;right=152;bottom=167;transparent=1;z=13}
 )
 /*}}*/
 
+import config;
 import py3;
-import py3.export.aardio;
-
 var autoDanbao=py3.import("AutoDanBao");
 
+//值初始化
+mainForm.edit_browser.text=config.danbao.browser;
+mainForm.edit_url=config.danbao.url;
+
+//记录运行次数，第一次运行初始化函数
+var count= config.danbao.count;
+if(count==null)
+{
+	count=1;
+	autoDanbao.firstrun();
+}
+else {
+	count = count+1;
+}
+
+config.danbao.count=count;
+
 //console.dump(autoDanbao.codetest());
-mainForm.edit_info.print(autoDanbao.codetest())
+mainForm.edit_info.text=(count);
+
+
+
 mainForm.show();
 return win.loopMessage();
