@@ -33,7 +33,7 @@ class DanBaoInfo:
             self.stsartTime=_pd.iloc[0][10]
             self.endTime=_pd.iloc[0][11]
         elif _type=='car':
-            self.name=_pd.iloc[0][3]
+            self.name=_pd.iloc[0][4]
             self.certificates=_pd.iloc[0][7]
             self.certificates_type='机动车登记证'
             self.money=_pd.iloc[0][8]
@@ -132,11 +132,13 @@ def dataPledge(data_info,dir_path,port=9222):
     
     for i in f_p:
         tab.ele(f'tag=tr@@text():{os.path.basename(i)}').ele('tag=input@@placeholder:请选择').click()
+        #汽车分期及车贷需修改
         tab.eles('tag=li@@text()=他项权证@@class:el-select-dropdown__item')[-1].click()
     tab.eles(f'tag=tr@@text():{os.path.basename(f_p[0])}')[-1].ele('tag=button@@text():ocr识别').click()
     tab.wait.load_start()
 
     tab.ele('tag=label@@text():登记机构类型@@class:el-form-item__label').after('@@class:el-input').click()
+    #汽车分期及车贷需修改
     tab.ele('tag=li@@text()=不动产登记中心@@class:el-select-dropdown__item').click()
     
     tab.ele('tag=label@@text():是否存在登记到期日@@class:el-form-item__label').after('@@class:el-input').click()
