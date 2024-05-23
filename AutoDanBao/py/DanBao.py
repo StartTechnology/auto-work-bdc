@@ -149,7 +149,9 @@ def dataPledge(data_info,dir_path,port=9222):
     else:
         tab.eles('tag=li@@text()=否@@class:el-select-dropdown__item')[1].click()
 
-    
+    #取消页面所有input的只读属性
+    tab.run_js('var inputs=document.querySelectorAll("input");for(i=0;i<inputs.length;i++)inputs[i].readOnly=false;')
+
     tab.ele('tag=label@@text():权证编号@@class:el-form-item__label').after('@@class:el-input').input(data_info.certificates)
     tab.ele('tag=label@@text():登记金额@@class:el-form-item__label').after('@@class:el-input').input(data_info.money*10000)
     
