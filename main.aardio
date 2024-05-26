@@ -1,0 +1,55 @@
+import win.ui;
+/*DSG{{*/
+mainForm = win.form(text="不动产抵押Auto";right=959;bottom=591)
+mainForm.add(
+button3={cls="button";text="使用剪贴板数据填入（存量房）";left=104;top=271;right=328;bottom=316;z=6};
+button4={cls="button";text="使用剪贴板数据填入（预告抵押）";left=104;top=343;right=328;bottom=388;z=8};
+button_firstRun={cls="button";text="第一次运行初始化";left=104;top=158;right=223;bottom=195;z=3};
+button_openBrowser={cls="button";text="打开浏览器并跳转";left=273;top=158;right=433;bottom=195;z=4};
+edit_bowserpath={cls="edit";text="exe";left=203;top=46;right=672;bottom=69;edge=1;z=2};
+edit_info={cls="edit";text="信息框";left=535;top=285;right=714;bottom=393;edge=1;multiline=1;z=7};
+edit_url={cls="edit";text="url";left=461;top=165;right=714;bottom=193;edge=1;z=5};
+static={cls="static";text="浏览器地址";left=104;top=46;right=188;bottom=71;transparent=1;z=1}
+)
+/*}}*/
+
+import py3;
+import config;
+
+var autoBdc = py3.import("AutoBdc");
+
+
+mainForm.edit_bowserpath.text=config.bdc.bowserpath;
+mainForm.edit_url.text=config.bdc.url;
+
+mainForm.button_firstRun.oncommand = function(id,event){
+	autoBdc.firstRun();
+	mainForm.edit_info.text='初始化完成';
+}
+
+mainForm.button_openBrowser.oncommand = function(id,event){
+	autoBdc.bowserpath=mainForm.edit_bowserpath.text;
+	config.bdc.bowserpath=mainForm.edit_bowserpath.text;
+	config.bdc.url=mainForm.edit_url.text;
+	autoBdc.openbowser(mainForm.edit_bowserpath.text,mainForm.edit_url.text);
+	mainForm.edit_info.text='浏览器已启动';
+}
+
+mainForm.button3.oncommand = function(id,event){
+	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData());
+	autoBdc.newBusiness();
+	autoBdc.selectBusinessType(data);
+	autoBdc.businessInput(data);
+	mainForm.edit_info.text='完成';
+}
+
+mainForm.button4.oncommand = function(id,event){
+	data=autoBdc.PledgeInfo(autoBdc.creatClipboardData(),'预告');
+	autoBdc.newBusiness();
+	autoBdc.selectBusinessType(data);
+	autoBdc.businessInput(data);
+	mainForm.edit_info.text='完成';
+}
+
+mainForm.show();
+return win.loopMessage();
