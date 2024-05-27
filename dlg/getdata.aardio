@@ -1,0 +1,82 @@
+import win.ui;
+import console;
+import com.excel;
+import config;
+import fsys;
+import fsys.dlg;
+import fsys.config;
+/*DSG{{*/
+var winform = win.form(text="aardio form";right=954;bottom=449)
+winform.add(
+button={cls="button";text="存量房数据写入台账";left=129;top=260;right=315;bottom=301;z=1};
+button_refresh={cls="button";text="刷新数据";left=32;top=78;right=156;bottom=105;z=4};
+button_save={cls="button";text="保存数据";left=205;top=78;right=326;bottom=105;z=7};
+combobox_pledgetype={cls="combobox";left=146;top=22;right=271;bottom=48;edge=1;items={};mode="dropdown";z=5};
+edit_database_excel={cls="edit";text="Edit";left=136;top=184;right=441;bottom=214;edge=1;multiline=1;z=2};
+static={cls="static";text="台账路径";left=58;top=193;right=132;bottom=215;transparent=1;z=3};
+static2={cls="static";text="业务类型：";left=52;top=28;right=117;bottom=48;transparent=1;z=6}
+)
+/*}}*/
+
+/*
+import time;
+console.log(time(time.now(),"%Y%m%d"));
+*/
+
+//配置文件（抵押类型及所用的文件/res/static.table）
+var static_config=fsys.config("/res/").static;
+var pledge_type=static_config.pledge_type;
+
+//业务类型选择框
+for(i=1;#pledge_type;1){
+	winform.combobox_pledgetype.add(pledge_type[i])
+}
+winform.combobox_pledgetype.onOk  = function(id,event){
+	
+}
+
+var excel =com.excel();
+//excel.Visible =true;
+//excel.Application.ScreenUpdating=true;
+
+winform.edit_database_excel.text=config.database.excel_url;
+
+
+//设置虚拟数据
+
+winform.button.oncommand = function(id,event){
+	config.database.excel_url=winform.edit_database_excel.text;
+	
+	var sh =excel.WorkBooks.Open(winform.edit_database_excel.text).Worksheets("新系统业务");
+	
+	//获取新行号
+	var row=sh.UsedRange.Rows.Count+1;
+	//console.log(sh.Cells(696,5).getValue2());
+	//"/n"
+	for(i=1;pledge_info.persons;1){
+		if(i==1){
+			sh.Cells(row,2).setValue2(pledge_info.persons[i].name);
+			sh.Cells(row,3)setValue2(pledge_info.persons[i].id);
+			sh.Cells(row,4)setValue2(pledge_info.persons[i].phone);
+		}
+		else {
+			sh.Cells(row,2).setValue2(pledge_info.persons[i].name);
+			sh.Cells(row,3)setValue2(pledge_info.persons[i].id);
+			sh.Cells(row,4)setValue2(pledge_info.persons[i].phone);
+		}
+		
+	}
+	excel.Save();
+}
+
+winform.button_refresh.oncommand = function(id,event){
+
+}
+
+winform.button_save.oncommand = function(id,event){
+	
+}
+
+winform.show();
+win.loopMessage();
+return winform;
