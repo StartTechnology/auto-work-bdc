@@ -191,7 +191,7 @@ def selectBusinessType(plinfo,port=9222):
 def up_img_onebyone(file,ele):
     for i in file:
         ele.click.to_upload(i)
-        ele.wait(0.3)
+        ele.wait(0.5)
     return 1
 #上传影像
 def upImage(image_path,tab):
@@ -252,7 +252,7 @@ def upImage(image_path,tab):
                     up_img_onebyone(file_list,tab_img.ele("tag=li@@text():其他").ele("tag=div@@class:el-upload--text"))
                     #tab_img.ele("tag=li@@text():其他").ele("tag=div@@class:el-upload--text").click.to_upload(file_list)
                     pass
-                tab.wait(0.5)
+                tab.wait(0.8)
                 pass
         
 #业务界面
