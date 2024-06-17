@@ -317,7 +317,7 @@ winform.button_GD.oncommand = function(id,event){
 		,false/*如果此参数为false则忽略子目录*/
 	);
 
-
+	//添加数据到全局变量pledge_info
 	for(i=1;#datatable;1){
 		var _d=table.pop(datatable);
 		var person=Person();
@@ -328,7 +328,7 @@ winform.button_GD.oncommand = function(id,event){
 	}
 	
 	pledge_info.image_path=GD_path_name;
-	pledge_info.pldege_type=winform.combobox_pledgetype.selIndex;
+	pledge_info.pldege_type=winform.combobox_pledgetype.selText;
 	
 	grid.setTable(datatable);
 	winform.combobox_pledgetype.selIndex=null;
