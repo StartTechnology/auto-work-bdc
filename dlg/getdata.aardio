@@ -8,7 +8,7 @@ import fsys.config;
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
-button_addExcel={cls="button";text="数据写入台账";left=52;top=318;right=238;bottom=359;z=1};
+button_addExcel={cls="button";text="数据写入台账";left=63;top=315;right=249;bottom=356;z=1};
 button_newperson={cls="button";text="新增客户信息";left=52;top=240;right=271;bottom=268;z=11};
 combobox_pledgetype={cls="combobox";left=144;top=24;right=269;bottom=50;edge=1;items={};mode="dropdown";z=4};
 edit4={cls="edit";text="Edit";left=819;top=18;right=929;bottom=359;edge=1;multiline=1;z=10};
@@ -16,7 +16,7 @@ edit_database_excel={cls="edit";text="Edit";left=415;top=19;right=720;bottom=49;
 edit_id={cls="edit";text="身份证";left=122;top=203;right=190;bottom=227;edge=1;multiline=1;z=8};
 edit_name={cls="edit";text="姓名";left=51;top=203;right=110;bottom=227;edge=1;z=7};
 edit_phone={cls="edit";text="联系方式";left=205;top=203;right=271;bottom=227;edge=1;z=9};
-listview_persons={cls="listview";left=52;top=71;right=271;bottom=179;edge=1;z=6};
+listview_persons={cls="listview";left=36;top=68;right=276;bottom=176;edge=1;z=6};
 static={cls="static";text="台账路径";left=337;top=28;right=411;bottom=50;transparent=1;z=3};
 static2={cls="static";text="业务类型：";left=52;top=28;right=117;bottom=48;transparent=1;z=5};
 static3={cls="static";text="产权证号：";left=329;top=76;right=410;bottom=99;transparent=1;z=12};
@@ -76,13 +76,10 @@ winform.button_newperson.oncommand = function(id,event){
 }
 
 
-var excel =com.excel();
-excel.Visible =true;
-excel.Application.ScreenUpdating=true;
 
 winform.edit_database_excel.text=config.database.excel_url;
 
-
+//数据写入excel
 winform.button_addExcel.oncommand = function(id,event){
 	config.database.excel_url=winform.edit_database_excel.text;
 	//添加person数据到全局变量pledge_info
@@ -96,7 +93,10 @@ winform.button_addExcel.oncommand = function(id,event){
 		person.phone=_d.phone;
 		table.push(pledge_info.persons,person);
 	}
-
+	
+	var excel =com.excel();
+	excel.Visible =true;
+	excel.Application.ScreenUpdating=true;
 	var sh =excel.WorkBooks.Open(winform.edit_database_excel.text).Worksheets("新系统业务");
 	
 	//获取新行号
@@ -112,15 +112,21 @@ winform.button_addExcel.oncommand = function(id,event){
 		}
 		elseif(i==2)
 		{
-			sh.Cells(row,5).setValue2(pledge_info.persons[i].name);
-			sh.Cells(row,6).setValue2(pledge_info.persons[i].id);
-			sh.Cells(row,7).setValue2(pledge_info.persons[i].phone);
+			sh.Cells(row,5).setValue2('="'+pledge_info.persons[i].name+'"');
+			sh.Cells(row,6).setValue2('="'+pledge_info.persons[i].id+'"');
+			sh.Cells(row,7).setValue2('="'+pledge_info.persons[i].phone+'"');
 		}
-
+		else
+		{
+			sh.Cells(row,5).setValue2(sh.Cells(row,5).value2+'&CHAR(10)&"'+pledge_info.persons[i].name+'"');
+			sh.Cells(row,6).setValue2(sh.Cells(row,6).value2+'&CHAR(10)&"'+pledge_info.persons[i].id+'"');
+			sh.Cells(row,7).setValue2(sh.Cells(row,7).value2+'&CHAR(10)&"'+pledge_info.persons[i].phone+'"');
+		}
+		
 		
 	}
 	excel.Save();
-	
+	//excel.Quit();
 }
 
 winform.show();
