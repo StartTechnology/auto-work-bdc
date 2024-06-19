@@ -8,14 +8,14 @@ import fsys.config;
 /*DSG{{*/
 var winform = win.form(text="aardio form";right=954;bottom=449)
 winform.add(
-button_addExcel={cls="button";text="数据写入台账";left=63;top=315;right=249;bottom=356;z=1};
-button_newperson={cls="button";text="新增客户信息";left=52;top=240;right=271;bottom=268;z=11};
+button_addExcel={cls="button";text="数据写入台账";left=57;top=296;right=243;bottom=337;z=1};
+button_newperson={cls="button";text="新增客户信息";left=36;top=239;right=268;bottom=267;z=11};
 combobox_pledgetype={cls="combobox";left=144;top=24;right=269;bottom=50;edge=1;items={};mode="dropdown";z=4};
 edit4={cls="edit";text="Edit";left=819;top=18;right=929;bottom=359;edge=1;multiline=1;z=10};
 edit_database_excel={cls="edit";text="Edit";left=415;top=19;right=720;bottom=49;edge=1;multiline=1;z=2};
-edit_id={cls="edit";text="身份证";left=122;top=203;right=190;bottom=227;edge=1;multiline=1;z=8};
-edit_name={cls="edit";text="姓名";left=51;top=203;right=110;bottom=227;edge=1;z=7};
-edit_phone={cls="edit";text="联系方式";left=205;top=203;right=271;bottom=227;edge=1;z=9};
+edit_id={cls="edit";text="身份证";left=107;top=200;right=186;bottom=224;edge=1;multiline=1;z=8};
+edit_name={cls="edit";text="姓名";left=36;top=200;right=95;bottom=224;edge=1;z=7};
+edit_phone={cls="edit";text="联系方式";left=204;top=200;right=270;bottom=224;edge=1;z=9};
 listview_persons={cls="listview";left=36;top=68;right=276;bottom=176;edge=1;z=6};
 static={cls="static";text="台账路径";left=337;top=28;right=411;bottom=50;transparent=1;z=3};
 static2={cls="static";text="业务类型：";left=52;top=28;right=117;bottom=48;transparent=1;z=5};
@@ -77,8 +77,8 @@ winform.button_newperson.oncommand = function(id,event){
 
 
 
+excel =com.excel();
 winform.edit_database_excel.text=config.database.excel_url;
-
 //数据写入excel
 winform.button_addExcel.oncommand = function(id,event){
 	config.database.excel_url=winform.edit_database_excel.text;
@@ -93,8 +93,8 @@ winform.button_addExcel.oncommand = function(id,event){
 		person.phone=_d.phone;
 		table.push(pledge_info.persons,person);
 	}
+	table.reverse(pledge_info.persons);
 	
-	var excel =com.excel();
 	excel.Visible =true;
 	excel.Application.ScreenUpdating=true;
 	var sh =excel.WorkBooks.Open(winform.edit_database_excel.text).Worksheets("新系统业务");
@@ -112,21 +112,29 @@ winform.button_addExcel.oncommand = function(id,event){
 		}
 		elseif(i==2)
 		{
-			sh.Cells(row,5).setValue2('="'+pledge_info.persons[i].name+'"');
-			sh.Cells(row,6).setValue2('="'+pledge_info.persons[i].id+'"');
-			sh.Cells(row,7).setValue2('="'+pledge_info.persons[i].phone+'"');
+			sh.Cells(row,5).setValue2(pledge_info.persons[i].name);
+			sh.Cells(row,6).setValue2(pledge_info.persons[i].id);
+			sh.Cells(row,7).setValue2(pledge_info.persons[i].phone);
 		}
 		else
 		{
-			sh.Cells(row,5).setValue2(sh.Cells(row,5).value2+'&CHAR(10)&"'+pledge_info.persons[i].name+'"');
-			sh.Cells(row,6).setValue2(sh.Cells(row,6).value2+'&CHAR(10)&"'+pledge_info.persons[i].id+'"');
-			sh.Cells(row,7).setValue2(sh.Cells(row,7).value2+'&CHAR(10)&"'+pledge_info.persons[i].phone+'"');
+			sh.Cells(row,5).setValue2('="'+sh.Cells(row,5).value2+'"&CHAR(10)&"'+pledge_info.persons[i].name+'"');
+			if(#sh.Cells(row,6).value2){
+				sh.Cells(row,6).setValue2('="'+sh.Cells(row,6).value2+'"&CHAR(10)&"'+pledge_info.persons[i].id+'"');
+			}
+			if(#sh.Cells(row,7).value2){
+				sh.Cells(row,7).setValue2('="'+sh.Cells(row,7).value2+'"&CHAR(10)&"'+pledge_info.persons[i].phone+'"');
+			}
+			
+			sh.Cells(row,5).setValue2(sh.Cells(row,5).value2);
+			sh.Cells(row,6).setValue2(sh.Cells(row,6).value2);
+			sh.Cells(row,7).setValue2(sh.Cells(row,7).value2);
 		}
-		
+
 		
 	}
 	excel.Save();
-	//excel.Quit();
+	excel.Quit();
 }
 
 winform.show();

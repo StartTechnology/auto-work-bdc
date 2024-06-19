@@ -23,7 +23,9 @@ winform.button.oncommand = function(id,event){
 	autoBdc.newBusiness();
 	autoBdc.selectBusinessType(data);
 	autoBdc.businessInput(data,image_path);
+	
 	mainForm.edit_info.print('完成');
+
 }
 
 
@@ -34,7 +36,9 @@ winform.button2.oncommand = function(id,event){
 	autoBdc.newBusiness();
 	autoBdc.selectBusinessType(data);
 	autoBdc.businessInput(data,image_path);
+	
 	mainForm.edit_info.print('完成');
+
 }
 
 
