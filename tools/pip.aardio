@@ -5,11 +5,11 @@ py3.pip.setIndexUrl("aliyun");//切换国内镜像源，参数为空恢复
 进程外安装模块到 /py/Python+版本号/site-packages 目录，
 多个 pip 参数用逗号分开（用法与原版一样），含空格参数自动加双引号，并根据需要自动处理转义。
 */
-py3.pip.process("install","pandas"); 
+//py3.pip.process("install","pandas"); 
 py3.pip.process("install","DrissionPage"); 
 
 //ocr模块
-py3.pip.process("install","rapidocr-onnxruntime"); 
+//py3.pip.process("install","rapidocr-onnxruntime"); 
 //pip install rapidocr-onnxruntime
 
 //用一个空格分开所有参数的字符串也可以，其他参数用法与原版 pip 一样
