@@ -30,7 +30,6 @@
    2. 影像归档目录
    3. 业务数据记录表及数据库
 2. 设置自动化操作的必要步骤
-3. ~~每隔3秒保存一次当前状态（包括表单）到临时文件（前端页面操作），防止突然崩溃丢失数据~~
 ### 图像分类及图片归档
 1. - [ ] 业务类型选择
 2. - [ ] 业务材料选择
@@ -41,7 +40,7 @@
 2. 业务数据写入excel或数据库
 ### 数据录入自动化（Python 服务器 ）
 1. 自动化录入数据（异步）
-2. 进度显示及完成通知
+2. ~~进度显示及完成通知~~
 ## 业务信息
 ### 业务类型分类
 #### 抵押登记
@@ -76,4 +75,4 @@
 - win7 32位 
 - python 3.8.10 32位
 - python使用包：Drissionpage fastapi pandas pywin32 uvicorn nuitka
-- 编译命令：nuitka --standalone --output-dir=dist --plugin-enable=tk-inter --show-progress --show-memory --include-data-dir=./config=confog --include-data-dir=./static=static --mingw64 main.py 
+- 编译命令：nuitka --standalone --output-dir=../dist --plugin-enable=tk-inter --show-progress --show-memory --include-data-dir=./config=config --include-data-dir=./static=static --mingw64 main.py 
