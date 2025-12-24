@@ -56,8 +56,6 @@ async def initdefaultWorkConfig()->bool:
         #创建相关目录
         (pathlib.Path(work_path)/'tempImg').mkdir(exist_ok=True)
         (pathlib.Path(work_path)/'归档影像').mkdir(exist_ok=True)
-        from core import WorkConfig
-        WorkConfig.update_init()
         return True
     else:
         return False
