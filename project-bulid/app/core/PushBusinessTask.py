@@ -370,6 +370,7 @@ async def webInputInfo(businessInfo:BusinessInfo):
             tab.ele('@placeholder:请输入联系方式',timeout=3).input(customer['phone'],clear=True)
             ele_button=tab.ele('tag=span@text()=确认',timeout=3)
             ele_button.click()
+            ele_add_customer.wait(2)
             
     
 
@@ -384,7 +385,8 @@ async def webInputInfo(businessInfo:BusinessInfo):
     if ele_loan_term_start:
         ele_loan_term_start.input(businessInfo.loan_tream['start'],clear=True)
         ele_loan_term_start.after('tag=input@placeholder:结束日期',timeout=3).input(businessInfo.loan_tream['end'],clear=True)
-        ele_loan_info.ele('tag=label@text():债务履行期限').click()
+        ele_loan_info.wait(1)
+        ele_loan_info.ele('tag=label@text():债务履行期限').click(2)
     #合同编号
     ele_loan_contract= ele_loan_info.ele('tag=div@|text():银行合同编号@|text()=合同编号').ele('tag=input@placeholder:请输入合同编号',timeout=3)
     if ele_loan_contract:
@@ -489,6 +491,8 @@ async def webUploadImg(businessInfo:BusinessInfo):
             elif img_dir.name=="其他":
                 ele_annex_box.ele('tag=li@@text():其他',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
             ele_annex_box.wait(2)
+    service_tab=BROWSER.get_tab(url='8002')
+    BROWSER.activate_tab(service_tab)
 
 #网页操作 - 保存
 def webSave():
@@ -510,17 +514,18 @@ if __name__ == '__main__':
 
 
 
-    business_type="合并登记"
-    customers=[{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"}]
-    businessinfo=BusinessInfo(business_type=business_type,customers=customers)
-    businessinfo.certificate=["赣（2024）吉安市不动产证明第7019815号"]
-    businessinfo.loan_amount="1000000"
-    businessinfo.loan_tream={"start":"20240101","end":"20241201"}
-    businessinfo.loan_contract="2024000001"
-    businessinfo.loan_guarantee="全部"
-    businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记\work\tempImg"
+    # business_type="合并登记"
+    # customers=[{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"}]
+    # businessinfo=BusinessInfo(business_type=business_type,customers=customers)
+    # businessinfo.certificate=["赣（2024）吉安市不动产证明第7019815号"]
+    # businessinfo.loan_amount="1000000"
+    # businessinfo.loan_tream={"start":"20240101","end":"20241201"}
+    # businessinfo.loan_contract="2024000001"
+    # businessinfo.loan_guarantee="全部"
+    # businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记\work\tempImg"
     
-    #asyncio.run(writeBusinessInfoToWps(businessinfo,FILE_PATH))
+    service_tab=BROWSER.get_tab(url='5173')
+    BROWSER.activate_tab(service_tab)
     
     
     

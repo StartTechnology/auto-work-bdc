@@ -1,7 +1,6 @@
 import {ref,computed} from 'vue'
 import {defineStore} from 'pinia'
 import {PageConfig} from './config'
-import axios from 'axios'
 export const ImgConfig=defineStore('ImgConfig',()=>{
     const pageConfig=PageConfig();
 
@@ -21,7 +20,7 @@ export const ImgConfig=defineStore('ImgConfig',()=>{
     //OCR图片信息
     const ocr_imgs_url=computed(()=>{return pageConfig.server_url+'/img/ocrimgs';});
     //获取临时图片目录文件夹
-    const get_temp_img_dir_url=computed(()=>{return pageConfig.server_url+'/setting/gettempdir';});
+    //const get_temp_img_dir_url=computed(()=>{return pageConfig.server_url+'/setting/gettempdir';});
     //归档影像url
     const archive_img_url=computed(()=>{return pageConfig.server_url+'/img/archiveimg';});
 
@@ -34,8 +33,6 @@ export const ImgConfig=defineStore('ImgConfig',()=>{
     const images=ref([] as ImgItem[])
 
     async function getImgConfig(){
-        const tempDirRespomse=await axios.get(get_temp_img_dir_url.value);
-        temp_img_dir.value=tempDirRespomse.data;
         img_dir.value=temp_img_dir.value;
     }
 

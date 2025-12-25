@@ -47,10 +47,10 @@
         </a-typography-title>
           <a-input
             v-model="imgConfig.img_dir"
-            
-            readonly
+            placeholder="请输入影像目录路径"
+            allow-clear
             class="path-input"
-            :style="{ width: '300px' }"
+            :style="{ width: '500px' }"
           >
           </a-input>
       </div>
@@ -66,7 +66,7 @@
             placeholder="请输入Excel输出目录路径"
             allow-clear
             class="path-input"
-            :style="{ width: '300px' }"
+            :style="{ width: '500px' }"
           >
           </a-input>
           <a-button type="primary" class="action-button" @click="saveXlsxPath"> 保存路径 </a-button>
@@ -121,6 +121,7 @@ const taskInfo = computed(() => {
   if (businessConfig.loan_type != "") {
     task.loan_type = businessConfig.loan_type;
     task.loan_manger = businessConfig.loan_manager;
+    task.loan_contract = businessConfig.loan_contract[0];
     task.loan_amount = businessConfig.loan_amount[0];
     task.loan_tream = businessConfig.loan_tream[0];
     task.loan_guarantee = businessConfig.loan_guarantee;

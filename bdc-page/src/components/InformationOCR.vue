@@ -196,7 +196,9 @@
                   allow-clear
                   style="width: 480px"
                 ></a-input-number>
+                <a-tag checkable color="arcoblue" v-if="businessConfig.loan_amount[0] != ''&&businessConfig.loan_amount[0] != null">{{ numberToZhCurrency(businessConfig.loan_amount[0]!) }}</a-tag>
               </a-form-item>
+
               <a-form-item label="贷款期限:">
                 <a-range-picker
                   format="YYYYMMDD"
@@ -531,6 +533,7 @@ watch(businessConfig.customer, () => {
 
 //占位无作用
 const business_form = reactive({});
+//日期
 const loan_tream = computed({
   get: () => {
     return [
@@ -572,7 +575,7 @@ const certificate=computed(()=>{
 });
 //删除权证单行信息
 const handleDeletecertificate=(index:number)=>{
-  if (businessConfig.certificate[index]) {
+  if (businessConfig.certificate[index]||businessConfig.certificate[index]=='') {
     businessConfig.certificate.splice(index, 1);
   }
 }

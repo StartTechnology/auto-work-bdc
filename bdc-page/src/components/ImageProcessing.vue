@@ -73,6 +73,7 @@
                   placeholder="请输入图片目录路径"
                   class="directory-input"
                   size="large"
+                  allow-clear
                 />
                 <a-button
                   type="primary"
@@ -366,6 +367,7 @@ const imageThumbnails = ref([] as ImgItem[]);
 // 读取图片
 const handleReadImages = () => {
   if (imgConfig.temp_img_dir !== "") {
+
     axios
       .post(imgConfig.temp_img_url, { path: imgConfig.temp_img_dir })
       .then((res) => {
@@ -438,6 +440,7 @@ const handleRemoveImage = (img: ImgItem) => {
 
 const changeTab_emit=defineEmits<{(e:'tab-change',key:string):void}>();
 const handleNext = () => {
+  handleReadImages();
   changeTab_emit('tab-change','3');
 };
 </script>

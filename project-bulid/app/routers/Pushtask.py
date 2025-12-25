@@ -19,7 +19,8 @@ async def push_task(business_info:BusinessInfo):
     else:
         await PushBusinessTask.cacheBusinessInfo(business_info)
     await PushBusinessTask.webSelectType(business_info.business_type,business_info.certificate)
-    await asyncio.gather(PushBusinessTask.webInputInfo(business_info),PushBusinessTask.webUploadImg(business_info))
+    await PushBusinessTask.webInputInfo(business_info)
+    await PushBusinessTask.webUploadImg(business_info)
     #PushBusinessTask.webSave()
 
 #将业务信息写入wps

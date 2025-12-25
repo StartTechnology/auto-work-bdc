@@ -15,7 +15,7 @@
           </a-col>
           <a-col :span="12">
             <a-input
-              v-model="serverAddress"
+              v-model="pageConfig.server_url"
               placeholder="请输入服务器地址（如：http://localhost:5000）"
               class="input-field"
               allow-clear
@@ -135,7 +135,7 @@ import { Message } from "@arco-design/web-vue";
 import { PageConfig } from "../store/config";
 const pageConfig = PageConfig();
 // 响应式数据定义
-const serverAddress = ref<string>("");
+
 const workDirectory = ref<string>("");
 
 // 表格列配置
@@ -145,12 +145,12 @@ const tableData = ref([]);
 onMounted(() => {resetPageConfig();});
 //测试服务器是否联通，结果以通知形式返回
 function serverAddressTest() {
-    if(!serverAddress.value.trim())
+    if(!pageConfig.server_url.trim())
     {
         Message.error({content:"服务器地址不能为空",duration:1500,closable:true});
         return
     }
-    axios.get(serverAddress.value).then(
+    axios.get(pageConfig.server_url).then(
         (res)=>{
             if(res.status ==200)
             {
@@ -185,7 +185,7 @@ function openBusinessConfigFile()
 }
 //从服务器读取配置（包括业务配置）
 async function getPageConfig(): Promise<void> {
-    pageConfig.server_url=serverAddress.value;
+    
     await pageConfig.getConfigFromServer();
     resetPageConfig();
 }
@@ -196,7 +196,7 @@ function savePageConfig(): void {
       Message.error('工作目录不能为空');
       return
     }
-    pageConfig.server_url=serverAddress.value;
+    
     pageConfig.work_dir=workDirectory.value;
     pageConfig.business_config_colums=tableColumns.value;
     pageConfig.business_config_data=tableData.value;
@@ -205,7 +205,7 @@ function savePageConfig(): void {
 }
 //重置配置 重新加载本地缓存配置
 function resetPageConfig(): void {
-  serverAddress.value = pageConfig.server_url;
+  
   workDirectory.value = pageConfig.work_dir;
   tableColumns.value=pageConfig.business_config_colums;
   tableData.value=pageConfig.business_config_data;
