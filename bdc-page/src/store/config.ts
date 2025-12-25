@@ -2,7 +2,7 @@ import {ref,computed} from 'vue'
 import {defineStore} from 'pinia'
 import axios from 'axios';
 export const PageConfig=defineStore('PageConfig',()=>{
-    const server_url=ref(`http://localhost:8000`);
+    const server_url=ref(`http://localhost:8002`);
     const work_dir=ref(`D:/work`);
 
     //业务配置

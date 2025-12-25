@@ -22,12 +22,12 @@ def initdefaultConfig() ->None:
             'DefaultBusinessConfig':config_path.parent/'业务参数.xlsx',
             'SQLitePath':''
         }
-        with open(CONFIG_PATH,'w', encoding='utf-8') as f:
-            config.write(f)
     else:
         config.read(CONFIG_PATH, encoding='utf-8')
-        config.set('FilePath','DefaultBusinessConfig', str((config_path.parent/'业务参数.xlsx').resolve()) )
-        pass
+        config.set('FilePath','defaultBusinessConfig', str((config_path.parent/'业务参数.xlsx').resolve()) )
+    with open(CONFIG_PATH,'w', encoding='utf-8') as f:
+            config.write(f)
+    pass
 #创建工作文件夹的默认配置
 async def initdefaultWorkConfig()->bool:
     work_path:str= getWorkPath()
@@ -85,7 +85,15 @@ def getWorkPath()->str:
 
 
 if __name__=="__main__":
+    config_path= pathlib.Path(CONFIG_PATH)
+    config=configparser.ConfigParser()
+    config.read(CONFIG_PATH, encoding='utf-8')
+    config.set('FilePath','DefaultBusinessConfig', str((config_path.parent/'业务参数.xlsx').resolve()) )
+    with open(CONFIG_PATH,'w', encoding='utf-8') as f:
+            config.write(f)
+    
+
     #asyncio.run(initdefaultConfig())
-    print(asyncio.run(initdefaultConfig()))
+    #print(asyncio.run(initdefaultConfig()))
     pass
 
