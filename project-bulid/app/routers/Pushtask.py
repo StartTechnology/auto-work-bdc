@@ -17,7 +17,7 @@ async def push_task(business_info:BusinessInfo):
     if not buss_info is None:
         business_info=buss_info
     else:
-        await PushBusinessTask.saveBusinessInfoToCache(business_info)
+        await PushBusinessTask.cacheBusinessInfo(business_info)
     await PushBusinessTask.webSelectType(business_info.business_type,business_info.certificate)
     await asyncio.gather(PushBusinessTask.webInputInfo(business_info),PushBusinessTask.webUploadImg(business_info))
     #PushBusinessTask.webSave()

@@ -37,5 +37,6 @@ def home():
 app.mount("/", StaticFiles(directory="./static",html=True), name="page")
 
 if __name__=='__main__':
-    uvicorn.run(app,host="0.0.0.0",port=8002,reload=False)
+    #uvicorn.run(app,host="0.0.0.0",port=8002,reload=True)
+    uvicorn.run(app,host="0.0.0.0",port=8002)
     #print(home())

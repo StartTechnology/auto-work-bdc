@@ -148,7 +148,7 @@ async def cacheBusinessInfo(businessInfo:BusinessInfo):
 #读取businessinfo到对象
 async def readBusinessInfoFromCache(path:str):
     cache_path=Path(path)/CashBusinessInfoName
-    if not cache_path.exists():
+    if cache_path.exists():
         with open(cache_path,'rb') as f:
             businessInfo=pickle.load(f)
             return businessInfo
@@ -320,9 +320,9 @@ async def webSelectType(business_type:str,certificate:Optional[List[str]]=None):
         pass
     elif business_type=="解押":
         tab.ele('@placeholder:请选择申请大类',timeout=3).click()
-        tab.ele('text:房屋抵押注销登记',timeout=3).click()
+        tab.ele('tag=li@@text():房屋抵押注销登记',timeout=3).click()
         tab.ele('@placeholder:请选择申请小类',timeout=3).click()
-        tab.ele('text:房屋抵押注销登记',timeout=3).click()
+        tab.eles('tag=li@@text():房屋抵押注销登记',timeout=3)[-1].click()
         tab.ele('@placeholder:请选择证书类型',timeout=3).click()
         if len(new_certificate)>0:
             tab.ele('text:不动产登记证明',timeout=3).click()
@@ -338,6 +338,8 @@ async def webSelectType(business_type:str,certificate:Optional[List[str]]=None):
 
 #网页操作 - 录入信息
 async def webInputInfo(businessInfo:BusinessInfo):
+    if "解押" in businessInfo.business_type:
+        return
     tab=BROWSER.get_tab(url=URL)
     #添加抵押人
     if businessInfo.business_type=="合并登记（预告抵押）":
