@@ -334,6 +334,7 @@ async def webSelectType(business_type:str,certificate:Optional[List[str]]=None):
         pass
 
     tab.ele('text:确定',timeout=3).click()
+    tab.wait(1)
     pass
 
 #网页操作 - 录入信息
@@ -370,7 +371,7 @@ async def webInputInfo(businessInfo:BusinessInfo):
             tab.ele('@placeholder:请输入联系方式',timeout=3).input(customer['phone'],clear=True)
             ele_button=tab.ele('tag=span@text()=确认',timeout=3)
             ele_button.click()
-            ele_add_customer.wait(2)
+            ele_add_customer.wait(1)
             
     
 
@@ -385,8 +386,9 @@ async def webInputInfo(businessInfo:BusinessInfo):
     if ele_loan_term_start:
         ele_loan_term_start.input(businessInfo.loan_tream['start'],clear=True)
         ele_loan_term_start.after('tag=input@placeholder:结束日期',timeout=3).input(businessInfo.loan_tream['end'],clear=True)
-        ele_loan_info.wait(1)
-        ele_loan_info.ele('tag=label@text():债务履行期限').click(2)
+        ele_loan_info.wait(0.5)
+        #按回车键
+        tab.actions.key_down('ENTER').key_up('ENTER')
     #合同编号
     ele_loan_contract= ele_loan_info.ele('tag=div@|text():银行合同编号@|text()=合同编号').ele('tag=input@placeholder:请输入合同编号',timeout=3)
     if ele_loan_contract:

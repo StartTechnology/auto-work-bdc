@@ -265,6 +265,7 @@ function submitTask()
   axios.post(businessConfig.submit_task_url,taskInfo.value).then(()=>{
     Message.success("任务完成");
     businessConfig.reset();
+    imgConfig.images.length=0;
     changeTab_emit('tab-change','2');
   })
 }

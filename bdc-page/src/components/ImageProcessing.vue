@@ -372,6 +372,7 @@ const handleReadImages = () => {
       .post(imgConfig.temp_img_url, { path: imgConfig.temp_img_dir })
       .then((res) => {
         imageThumbnails.value.length = 0; // 清空现有图片
+        imgConfig.images.length=0;
         res.data.forEach((item: any) => {
           imageThumbnails.value.push({
             name: item.name,

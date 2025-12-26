@@ -282,7 +282,7 @@
 // ==================================================
 // 引入Arco Design Vue组件和图标
 // ==================================================
-import { ref, reactive, computed, onMounted, watch } from "vue";
+import { ref, reactive, computed, onMounted, watch,onActivated  } from "vue";
 import { numberToZhCurrency} from "number-to-zh-currency";
 import { Message } from "@arco-design/web-vue";
 import {
@@ -375,8 +375,8 @@ watch([()=>businessConfig.loan_amount[0],()=>businessConfig.loan_type], () => {
 });
 
 //初始化数据
-onMounted(() => {
-
+onActivated(() => {
+  console.log("onActivated");
   thumbnails.value.length = 0;
   for (let img of imgConfig.images) {
     thumbnails.value.push({ img: img, selected: false });
