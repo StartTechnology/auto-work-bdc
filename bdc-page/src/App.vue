@@ -22,8 +22,8 @@ function changeTab(tabs:string)
       <ImageProcessing @tab-change="changeTab"></ImageProcessing>
     </a-tab-pane>
     <a-tab-pane key="3" title="整理信息">
-      <keep-alive>
-      <InformationOCR @tab-change="changeTab"></InformationOCR></keep-alive>
+      
+      <InformationOCR @tab-change="changeTab" :is-active="active_tabs_index === '3'"></InformationOCR>
     </a-tab-pane>
     <a-tab-pane key="4" title="提交任务">
       <PushTask @tab-change="changeTab"> </PushTask>

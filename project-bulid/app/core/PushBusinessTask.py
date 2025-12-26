@@ -442,6 +442,14 @@ async def webInputInfo(businessInfo:BusinessInfo):
                     eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[i],clear=True)
                 else:
                     eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[0],clear=True)
+    else:
+        eles_certificate=tab.eles('tag=input@placeholder:请输入房产证号',timeout=3)
+        if eles_certificate:
+            for i in range(len(eles_certificate)):
+                if len(businessInfo.certificate)>=i+1:
+                    eles_certificate[i].input(businessInfo.certificate[i],clear=True)
+                else:
+                    eles_certificate[i].input(businessInfo.certificate[0],clear=True)
 
 #网页操作 - 上传影像
 async def webUploadImg(businessInfo:BusinessInfo):
@@ -525,10 +533,5 @@ if __name__ == '__main__':
     # businessinfo.loan_contract="2024000001"
     # businessinfo.loan_guarantee="全部"
     # businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记\work\tempImg"
-    
-    service_tab=BROWSER.get_tab(url='5173')
-    BROWSER.activate_tab(service_tab)
-    
-    
     
     pass
