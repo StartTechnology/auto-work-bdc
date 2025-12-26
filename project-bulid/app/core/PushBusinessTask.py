@@ -487,7 +487,7 @@ async def webUploadImg(businessInfo:BusinessInfo):
             elif img_dir.name=="不动产抵押权注销证明":
                 ele_annex_box.ele('tag=li@@text():不动产抵押权注销证明',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
             elif img_dir.name=="关于抵押预告登记的约定":
-                ele_annex_box.ele('tag=li@@text():关于预告抵押登记的约定',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
+                ele_annex_box.ele('tag=li@@text():约定',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
             elif img_dir.name=="结婚证或具结保证书":
                 ele_annex_box.ele('tag=li@@text():结婚证或具结保证书',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
             elif img_dir.name=="其他":
