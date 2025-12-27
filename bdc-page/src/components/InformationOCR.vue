@@ -284,7 +284,7 @@
 // ==================================================
 import { ref, reactive, computed, watch ,toRefs } from "vue";
 import { numberToZhCurrency} from "number-to-zh-currency";
-import { Message } from "@arco-design/web-vue";
+import { Message,Notification  } from "@arco-design/web-vue";
 import {
   IconScan,
   IconDelete,
@@ -380,7 +380,6 @@ const props = defineProps({
 const { isActive } = toRefs(props); // 使用 toRefs 保持响应性
 //初始化数据
 watch(isActive,() => {
-  console.log("onActivated");
   thumbnails.value.length = 0;
   for (let img of imgConfig.images) {
     thumbnails.value.push({ img: img, selected: false });
@@ -418,7 +417,9 @@ const handleStartOCR = async () => {
   let selectOCRType=businessConfig.OCRTYPE.find((item) => item.value == selectedOCRType.value);
   
   selectOCRType!.is_loading = true;
-  let selectedOCRType_value=selectedOCRType.value;
+  const selectedOCRType_value=selectedOCRType.value;
+  const selectedOCRType_name=selectOCRType!.name;
+  businessConfig.OCRMessage.push(selectedOCRType_name);
   axios
     .post(imgConfig.ocr_imgs_url, {
       file_list: thumbnails.value
@@ -427,7 +428,7 @@ const handleStartOCR = async () => {
       ocr_type: parseInt(selectedOCRType_value),
     })
     .then((res) => {
-      console.log(res.data);
+      //console.log(res.data);
       switch (selectedOCRType_value) {
         case "1":
           res.data.forEach((item: any) => {
@@ -467,10 +468,18 @@ const handleStartOCR = async () => {
           });
           break;
       }
-      
+
+      //删除OCR信息队列中的对应值
+      const index:number= businessConfig.OCRMessage.indexOf(selectedOCRType_name)
+      if(index>-1){businessConfig.OCRMessage.splice(index,1)}
+
     })
     .catch((err) => {
       Message.error("OCR请求错误：" + err);
+      selectOCRType!.is_loading = false;
+      //删除OCR信息队列中的对应值
+      const index:number= businessConfig.OCRMessage.indexOf(selectedOCRType_name)
+      if(index>-1){businessConfig.OCRMessage.splice(index,1)}
     })
     .finally(() => {
       selectOCRType!.is_loading = false;
@@ -483,7 +492,28 @@ const handleStartOCR = async () => {
     });
 };
 
-
+//根据OCR信息对应显示当前的通知信息
+watch(businessConfig.OCRMessage,()=>{
+  if(businessConfig.OCRMessage.length>0){
+    const into_content:string=businessConfig.OCRMessage.join(" ");
+    Notification.info({
+        id:'ocr_information',
+        title: '正在OCR图片信息',
+        content: into_content,
+        closable: true,
+        duration:999999999,
+    })
+  }
+  else{
+        Notification.info({
+        id:'ocr_information',
+        title: 'OCR已完成',
+        content: '所有图片已处理完成',
+        closable: true,
+        duration:2000,
+    })
+  }
+})
 
 //客户信息表格数据标题
 const customerTableTitle = reactive([

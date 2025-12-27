@@ -348,7 +348,8 @@ watch(selectedMaterials, async () => {
     (a, b) => sortId.indexOf(a.label) - sortId.indexOf(b.label)
   );
   //类型同步本地目录
-  axios
+  if (imgConfig.temp_img_dir !== "") {
+      axios
     .post(imgConfig.sync_img_category_url, {
       path: imgConfig.temp_img_dir,
       category_list: materialCategories.value.map((item) => item.label),
@@ -356,6 +357,11 @@ watch(selectedMaterials, async () => {
     .catch((error) => {
       message.error("服务器错误：" + error.message);
     });
+  }
+  else{
+    message.warning("请输入图片目录路径");
+  }
+
   //给业务数据赋值
   businessConfig.business_type=selectedBusinessType.value;
   businessConfig.business_materials=materialCategories.value.map((item) => item.label);

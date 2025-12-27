@@ -41,7 +41,7 @@ async def ModelOcrImg(img_path:str,struct_key:StructKey):
                 "role": "user",
                 "content": [
                     {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{ImgToBase64(img_path)}"}},
-                    {"type": "text", "text": "请OCR这张图片所有信息，并使用如下结构化返回标准json数组格式(如无结果则返回空数组)结果："+struct_key.value}
+                    {"type": "text", "text": "请OCR这张图片，并使用如下结构化返回标准json数组格式(如无结果则返回空数组)结果："+struct_key.value}
                 ]
             }
         ],
