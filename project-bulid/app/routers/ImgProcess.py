@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter
+from fastapi import APIRouter,Response
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from core import ImageProgram,ImageOCR
@@ -24,7 +24,13 @@ async def getTempImg(dir:ImgProcessPOST)->list:
 #根据链接返回图片
 @router.get('/getimg',summary='获取图片')
 async def getImg(dir:str):
-    return FileResponse(path=dir)
+    # 定义禁止缓存的头部
+    headers = {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+    }
+    return FileResponse(path=dir,headers=headers)
 
 
 @router.post('/setimgcategory',summary='设置图片分类(路径)')
@@ -34,6 +40,8 @@ async def setImgCategory(post:ImgProcessPOST):
 
 @router.post('/syncimgcategory',summary='同步图片分类目录')
 async def syncImgCategory(post:ImgProcessPOST):
+   if post.path.strip()=='' or (post.path is None):
+       return
    await ImageProgram.synchroniseCatalogues(post.path,post.category_list)
 
 @router.post('/clearcategoryimg',summary='清空某个分类图片(目录绝对路径)')

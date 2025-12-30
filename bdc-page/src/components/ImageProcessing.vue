@@ -12,7 +12,7 @@
               <div class="info-item">
                 <label class="info-label">业务类型选择</label>
                 <a-select
-                  v-model="selectedBusinessType"
+                  v-model="businessConfig.business_type"
                   class="business-select"
                   placeholder="请选择业务类型"
                   size="large"
@@ -295,10 +295,10 @@ onMounted(() => {
   //初始化图片设置的目录
   imgConfig.getImgConfig();
 });
-const selectedBusinessType = ref<string>("");
+
 
 const selectedMaterials = computed(() => {
-  if (selectedBusinessType.value == "") {
+  if (businessConfig.business_type == "") {
     return [];
   } else {
     let index_colum: string = (
@@ -306,7 +306,7 @@ const selectedMaterials = computed(() => {
         dataIndex: string;
         title: string;
       }[]
-    ).find((item) => item.title === selectedBusinessType.value)!.dataIndex;
+    ).find((item) => item.title === businessConfig.business_type)!.dataIndex;
     return pageConfig.business_config_data
       .filter((item) => item[index_colum] == "1")
       .map((item) => item["0"]);
@@ -363,7 +363,6 @@ watch(selectedMaterials, async () => {
   }
 
   //给业务数据赋值
-  businessConfig.business_type=selectedBusinessType.value;
   businessConfig.business_materials=materialCategories.value.map((item) => item.label);
 });
 

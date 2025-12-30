@@ -76,6 +76,7 @@ async def selectFileToCategory(dir:str,category:str)->None:
         multiple=True  # 启用多选（可选，默认False）
     )
     file_list=list(file_paths) if file_paths else []
+    if len(file_list)==0: return
     for file in file_list:
         file_path=pathlib.Path(file)
         new_dir=pathlib.Path(dir)/category

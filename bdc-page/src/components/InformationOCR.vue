@@ -404,6 +404,7 @@ watch(isActive,() => {
 
 // 开始OCR处理
 const handleStartOCR = async () => {
+  
   const selectedItems = thumbnails.value.filter((item) => item.selected);
   if (selectedItems.length === 0) {
     Message.warning("请先选择要识别的材料");

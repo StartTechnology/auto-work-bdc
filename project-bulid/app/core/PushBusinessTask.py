@@ -7,6 +7,7 @@ from pathlib import Path
 import win32com.client as win32
 
 BROWSER=Chromium()
+PORT='8002'
 URL='https://www.jabdc.com'
 CashBusinessInfoName='businessInfo.pkl'
 
@@ -426,9 +427,9 @@ async def webInputInfo(businessInfo:BusinessInfo):
            if res:
             new_certificate.append([res.group(1),res.group(2)])
     
-    ele_zhTwo=tab.ele('tag=div@class=zhTwo',timeout=3)
-    if ele_zhTwo:
-        eles_certificate=ele_zhTwo.eles('tag=label@|text():产权证号@|text():房产证',timeout=3)
+    eles_zhTwo=tab.eles('tag=div@class=zhTwo',timeout=3)
+    if len(eles_zhTwo)>0:
+        eles_certificate=list(map(lambda x:x.ele('tag=label@|text():产权证号@|text():房产证',timeout=3),eles_zhTwo))
         for i in range(len(eles_certificate)):
             if len(new_certificate)>0:
                 if len(new_certificate)>=i+1:
@@ -501,7 +502,7 @@ async def webUploadImg(businessInfo:BusinessInfo):
             elif img_dir.name=="其他":
                 ele_annex_box.ele('tag=li@@text():其他',timeout=3).ele('tag=div@@class:el-upload--text',timeout=3).click.to_upload('\n'.join(img_list))
             ele_annex_box.wait(2)
-    service_tab=BROWSER.get_tab(url='8002')
+    service_tab=BROWSER.get_tab(url=PORT)
     BROWSER.activate_tab(service_tab)
 
 #网页操作 - 保存
