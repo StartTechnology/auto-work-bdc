@@ -10,6 +10,7 @@ dependencies = [
     "nuitka>=2.8.9",
     "pandas>=2.0.3",
     "pywin32>=311",
+    "pyyaml>=6.0.3",
     "uvicorn>=0.33.0",
 ]
 

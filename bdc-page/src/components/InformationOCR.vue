@@ -506,7 +506,7 @@ watch(businessConfig.OCRMessage,()=>{
     })
   }
   else{
-        Notification.info({
+        Notification.success({
         id:'ocr_information',
         title: 'OCR已完成',
         content: '所有图片已处理完成',

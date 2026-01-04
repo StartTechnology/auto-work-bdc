@@ -90,7 +90,7 @@ import { BusinessConfig } from "../store/BusinessConfig";
 import { ImgConfig } from "../store/ImgConfig.ts";
 import { PageConfig } from "../store/config.ts"
 import axios from "axios";
-import { Message } from "@arco-design/web-vue";
+import { Message,Notification } from "@arco-design/web-vue";
 const businessConfig = BusinessConfig();
 const imgConfig = ImgConfig();
 const pageConfig = PageConfig();
@@ -254,8 +254,19 @@ function saveXlsxPath() {
 //写入excel
 function writeExcel() {
   axios.post(businessConfig.write_data_url,{"business_info":taskInfo.value,'path':pageConfig.businessXlsx_path}).then(()=>{
-    Message.success("写入完成");
+      Notification.success({
+        id:'write_xlsx',
+        content: '写入完成',
+        closable: true,
+        duration:3000,
+    })
   });
+  Notification.info({
+        id:'write_xlsx',
+        content: '正在写入表格',
+        closable: true,
+        duration:999999999,
+    })
 }
 
 //提交任务

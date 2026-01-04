@@ -2,14 +2,14 @@
 from typing import List, Optional
 from pydantic import BaseModel
 from DrissionPage import Chromium
-import openpyxl,asyncio,datetime,re,pickle
+import openpyxl,asyncio,datetime,re,yaml
 from pathlib import Path
 import win32com.client as win32
 
 BROWSER=Chromium()
 PORT='8002'
 URL='https://www.jabdc.com'
-CashBusinessInfoName='businessInfo.pkl'
+CashBusinessInfoName='businessInfo.yaml'
 
 class BusinessInfo(BaseModel):
     business_type:str
@@ -143,15 +143,15 @@ async def writeBusinessInfoToWps(businessInfo:BusinessInfo,file_path:str):
 #缓存businessinfo到图片文件夹
 async def cacheBusinessInfo(businessInfo:BusinessInfo):
     cache_path=Path(businessInfo.img_path)/CashBusinessInfoName
-    with open(cache_path,'wb') as f:
-        pickle.dump(businessInfo,f)
+    with open(cache_path,'w', encoding='utf-8') as f:
+        yaml.dump(businessInfo,f, allow_unicode=True, sort_keys=False)
     
 #读取businessinfo到对象
 async def readBusinessInfoFromCache(path:str):
     cache_path=Path(path)/CashBusinessInfoName
     if cache_path.exists():
-        with open(cache_path,'rb') as f:
-            businessInfo=pickle.load(f)
+        with open(cache_path,'r', encoding='utf-8') as f:
+            businessInfo=yaml.safe_load(f)
             return businessInfo
     else:
         return None
@@ -525,14 +525,15 @@ if __name__ == '__main__':
 
 
 
-    # business_type="合并登记"
-    # customers=[{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"}]
-    # businessinfo=BusinessInfo(business_type=business_type,customers=customers)
-    # businessinfo.certificate=["赣（2024）吉安市不动产证明第7019815号"]
-    # businessinfo.loan_amount="1000000"
-    # businessinfo.loan_tream={"start":"20240101","end":"20241201"}
-    # businessinfo.loan_contract="2024000001"
-    # businessinfo.loan_guarantee="全部"
-    # businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记\work\tempImg"
+    business_type="合并登记"
+    customers=[{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"}]
+    businessinfo=BusinessInfo(business_type=business_type,customers=customers)
+    businessinfo.certificate=["赣（2024）吉安市不动产证明第7019815号"]
+    businessinfo.loan_amount="1000000"
+    businessinfo.loan_tream={"start":"20240101","end":"20241201"}
+    businessinfo.loan_contract="2024000001"
+    businessinfo.loan_guarantee="全部"
+    businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记"
+    asyncio.run(cacheBusinessInfo(businessinfo))
     
     pass
