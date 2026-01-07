@@ -151,7 +151,7 @@ async def readBusinessInfoFromCache(path:str):
     cache_path=Path(path)/CashBusinessInfoName
     if cache_path.exists():
         with open(cache_path,'r', encoding='utf-8') as f:
-            businessInfo=yaml.safe_load(f)
+            businessInfo:BusinessInfo=yaml.unsafe_load(f)
             return businessInfo
     else:
         return None
@@ -429,20 +429,23 @@ async def webInputInfo(businessInfo:BusinessInfo):
     
     eles_zhTwo=tab.eles('tag=div@class=zhTwo',timeout=3)
     if len(eles_zhTwo)>0:
-        eles_certificate=list(map(lambda x:x.ele('tag=label@|text():产权证号@|text():房产证',timeout=3),eles_zhTwo))
-        for i in range(len(eles_certificate)):
-            if len(new_certificate)>0:
-                if len(new_certificate)>=i+1:
-                    eles_certificate[i].after('tag=input',index=1).input(new_certificate[i][0],clear=True)
-                    eles_certificate[i].after('tag=input',index=2).input(new_certificate[i][1],clear=True)
+        try:
+            eles_certificate=list(map(lambda x:x.ele('tag=label@|text():产权证号@|text():房产证',timeout=3),eles_zhTwo))
+            for i in range(len(eles_certificate)):
+                if len(new_certificate)>0:
+                    if len(new_certificate)>=i+1:
+                        eles_certificate[i].after('tag=input',index=1).input(new_certificate[i][0],clear=True)
+                        eles_certificate[i].after('tag=input',index=2).input(new_certificate[i][1],clear=True)
+                    else:
+                        eles_certificate[i].after('tag=input',index=1).input(new_certificate[0][0],clear=True)
+                        eles_certificate[i].after('tag=input',index=2).input(new_certificate[0][1],clear=True)
                 else:
-                    eles_certificate[i].after('tag=input',index=1).input(new_certificate[0][0],clear=True)
-                    eles_certificate[i].after('tag=input',index=2).input(new_certificate[0][1],clear=True)
-            else:
-                if len(businessInfo.certificate)>=i+1:
-                    eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[i],clear=True)
-                else:
-                    eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[0],clear=True)
+                    if len(businessInfo.certificate)>=i+1:
+                        eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[i],clear=True)
+                    else:
+                        eles_certificate[i].after('tag=input',index=1).input(businessInfo.certificate[0],clear=True)
+        except:
+            print("添加产权证号失败")
     else:
         eles_certificate=tab.eles('tag=input@placeholder:请输入房产证号',timeout=3)
         if eles_certificate:
@@ -534,6 +537,8 @@ if __name__ == '__main__':
     businessinfo.loan_contract="2024000001"
     businessinfo.loan_guarantee="全部"
     businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记"
+    print(businessinfo)
     asyncio.run(cacheBusinessInfo(businessinfo))
-    
+    res= asyncio.run(readBusinessInfoFromCache(businessinfo.img_path))
+    print(res)
     pass
