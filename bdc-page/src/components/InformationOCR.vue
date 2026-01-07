@@ -514,7 +514,7 @@ watch(businessConfig.OCRMessage,()=>{
         duration:2000,
     })
   }
-})
+},{deep:true})
 
 //客户信息表格数据标题
 const customerTableTitle = reactive([
