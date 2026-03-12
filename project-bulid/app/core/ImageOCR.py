@@ -7,8 +7,8 @@ import base64
 from enum import Enum
 API_URL = "https://api.siliconflow.cn/v1/chat/completions"
 
-API_MODEL="deepseek-ai/DeepSeek-OCR"
-API_MODEL_BACKUP="Qwen/Qwen3.5-9B"
+API_MODEL="zai-org/GLM-4.6V"
+API_MODEL_BACKUP="Qwen/Qwen3.5-35B-A3B"
 
 API_KEY="sk-zhjfscwkpmrgsybhwdgugrfmjjzwcdoaizenvgrcouothsdo"
 
