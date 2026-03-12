@@ -117,6 +117,7 @@
                   v-if="businessConfig.customer[rowIndex]"
                   v-model="businessConfig.customer[rowIndex].name"
                   placeholder="请输入客户姓名..."
+                  allow-clear
                 >
                 </a-input>
               </template>
@@ -125,6 +126,7 @@
                   v-if="businessConfig.customer[rowIndex]"
                   v-model="businessConfig.customer[rowIndex].id"
                   placeholder="请输入客户证件号码..."
+                  allow-clear
                 ></a-input>
               </template>
               <template #phone="{ rowIndex }">
@@ -132,6 +134,7 @@
                   v-if="businessConfig.customer[rowIndex]"
                   v-model="businessConfig.customer[rowIndex].phone"
                   placeholder="请输入客户联系方式..."
+                  allow-clear
                 ></a-input>
               </template>
               <template #optional="{ rowIndex }">
@@ -395,6 +398,7 @@ watch(isActive,() => {
     loan_guarantee= res.data;
   });
   axios.get(businessConfig.get_developer_info_url).then((res) => {
+    developer.value.length = 0;
     res.data.forEach((element:any) => {
       developer.value.push({name:element[0],id:element[1],phone:element[2]});
       //console.log(developer.value);
