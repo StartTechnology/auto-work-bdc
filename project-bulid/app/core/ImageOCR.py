@@ -7,8 +7,7 @@ import base64
 from enum import Enum
 API_URL = "https://api.siliconflow.cn/v1/chat/completions"
 
-API_MODEL="zai-org/GLM-4.6V"
-API_MODEL_BACKUP="Qwen/Qwen3.5-35B-A3B"
+API_MODEL=["Qwen/Qwen3.5-4B","Qwen/Qwen3-VL-8B-Instruct","Pro/moonshotai/Kimi-K2.5","Qwen/Qwen3-Omni-30B-A3B-Instruct","Qwen/Qwen3-VL-30B-A3B-Instruct"]
 
 API_KEY="sk-zhjfscwkpmrgsybhwdgugrfmjjzwcdoaizenvgrcouothsdo"
 
@@ -35,42 +34,50 @@ async def ModelOcrImg(img_path:str,struct_key:StructKey):
     }
     # 构造请求体
     payload = {
-        "model": API_MODEL,  # 模型名称
+        "model": "API_MODEL",  # 模型名称
         "messages": [
             {
                 "role": "user",
                 "content": [
-                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{ImgToBase64(img_path)}"}},
-                    {"type": "text", "text": "请OCR这张图片所有信息，并使用如下结构化返回标准json数组格式(如无结果则返回空数组)结果："+struct_key.value}
+                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{ImgToBase64(img_path)}","detail": "low"}},
+                    {"type": "text", "text": "OCR提取所有文字，严格返回json数组(如无结果返回空数组)结果："+struct_key.value}
                 ]
             }
         ],
         #"prompt":  "请OCR这张图片，并使用如下结构化返回标准json格式结果："+struct_key,
-        "temperature": 0.7,      # 生成随机性(0-2，建议0.7-1.0)
-        "top_p": 0.9,            # 核心采样阈值(0-1，建议0.8-0.95)
-        "max_tokens": 1024,      # 最大生成长度(建议512-2048)
+        "temperature": 0.1,      # 生成随机性(0-2，建议0.7-1.0)
+        #"top_p": 0.9,            # 核心采样阈值(0-1，建议0.8-0.95)
+        "max_tokens": 512,      # 最大生成长度(建议512-2048)
         "stream": False, 
-        "detail": "high",  # 关键参数：控制输出精度
-        "response_format ": {'type': 'json_object'}
+        #"response_format": {'type': 'json_object'}
     }
-    try:
-        response=requests.post(API_URL,headers=headers,json=payload,timeout=(5,10))
-    except:
-        payload["model"]=API_MODEL_BACKUP
-        response=requests.post(API_URL,headers=headers,json=payload)
+    response=''
+    for api_model in API_MODEL:
+        payload["model"]=api_model
+        try:
+            response=requests.post(API_URL,headers=headers,json=payload,timeout=(3,20))
+            if response.status_code==200:
+                print(api_model)
+                break
+        except:
+            continue
 
+
+    if response=='':return [{'status':False}]
     if response.status_code==200:
         result= response.json()["choices"][0]['message']['content']
         print(result)
         result_match=re.match(r'.*?(\[.*?\])',result,re.DOTALL)
+        result_value=''
         if result_match!=None:
-            return json.loads(result_match.group(1))
+            result_value=json.loads(result_match.group(1))
         elif re.match(r'.*?({.*?})',result,re.DOTALL)!=None:
             result_match=re.match(r'.*?({.*?})',result,re.DOTALL)           
-            return [json.loads(result_match.group(1))]
-
+            result_value= [json.loads(result_match.group(1))]
+        return result_value
     else:
         print(f"请求失败，状态码：{response.status_code}，错误信息：{response.text}")
+        return [{'status':False}]
 
 
 async def OCRImgList(img_list:List[str],struct_key:StructKey):
