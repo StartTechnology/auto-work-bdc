@@ -7,9 +7,8 @@ import base64
 from enum import Enum
 API_URL = "https://api.siliconflow.cn/v1/chat/completions"
 
-API_MODEL=["Pro/moonshotai/Kimi-K2.5","Qwen/Qwen3-VL-32B-Instruct","zai-org/GLM-4.6V","Qwen/Qwen3-VL-32B-Instruct","Qwen/Qwen2.5-VL-32B-Instruct"]
+API_MODEL=["Qwen/Qwen3-VL-32B-Instruct","Pro/moonshotai/Kimi-K2.5","Qwen/Qwen2-VL-72B-Instruct"]
 
-API_MODEL=[]
 
 API_KEY="sk-zhjfscwkpmrgsybhwdgugrfmjjzwcdoaizenvgrcouothsdo"
 

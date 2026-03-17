@@ -143,7 +143,12 @@
                 /></a-button>
               </template>
             </a-table>
-          
+            
+            <a-button type="text" long  @click="handAddCustomer">
+              新增行
+            </a-button>
+            
+            
         </a-tab-pane>
 
         <!-- 贷款信息标签页 -->
@@ -225,12 +230,15 @@
           
         <!-- 抵押信息标签页 -->
         <a-tab-pane key="mortgage" title="抵押信息" >
-          <a-table
+          <a-space
+            direction="vertical"
+            fill
+            v-if="!businessConfig.business_type.includes('合并登记')">
+            <a-table
               :columns="certificateTableTitle"
               :data="certificate"
               :pagination="false"
               style="margin-top: 20px;"
-              v-if="!businessConfig.business_type.includes('合并登记')"
             >
           <template #id="{ rowIndex }">
                 <a-input
@@ -245,7 +253,14 @@
                   ><icon-delete
                 /></a-button>
             </template>
+            
           </a-table>
+            <a-button type="text" long  @click="handAddcertificate">
+              新增行
+            </a-button>
+          </a-space>
+
+
           <a-form :model="business_form" style="margin-top: 20px;" v-else>
           <!-- 购房合同 -->
               <a-form-item label="购房合同号:">
@@ -569,8 +584,12 @@ watch(businessConfig.customer, () => {
     businessConfig.customer.push({ name: "", id: "", phone: "" });
   }
 });
+//新增客户信息的按钮
+function handAddCustomer() {
+  businessConfig.customer.push({ name: "", id: "", phone: "" });
+}
 
-//占位无作用
+//占位无作用 不可删除
 const business_form = reactive({});
 //日期
 const loan_tream = computed({
@@ -628,6 +647,10 @@ watch(businessConfig.certificate, () => {
     businessConfig.certificate.push('');
   }
 });
+//新增权证信息行的按钮
+function handAddcertificate() {
+  businessConfig.certificate.push('');
+}
 
 //影像归档
 const changeTab_emit=defineEmits<{(e:'tab-change',key:string):void}>();

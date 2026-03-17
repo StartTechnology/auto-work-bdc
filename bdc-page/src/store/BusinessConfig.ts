@@ -80,6 +80,9 @@ export const BusinessConfig = defineStore(
       developer_info.value = { name: "", id: "", phone: "" };
       customer_contract.value = "";
       OCRMessage.value = []
+      OCRTYPE.value.forEach((item) => {
+        item.is_loading = false;
+      })
     }
 
     return {
