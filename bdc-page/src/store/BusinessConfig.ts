@@ -79,7 +79,7 @@ export const BusinessConfig = defineStore(
       loan_manager.value = "";
       developer_info.value = { name: "", id: "", phone: "" };
       customer_contract.value = "";
-      OCRMessage.value = []
+      OCRMessage.value.length = 0;
       OCRTYPE.value.forEach((item) => {
         item.is_loading = false;
       })

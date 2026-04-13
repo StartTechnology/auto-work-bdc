@@ -347,7 +347,7 @@ async def webInputInfo(businessInfo:BusinessInfo):
     if businessInfo.business_type=="合并登记（预告抵押）":
         tab.ele('tag=h3@@text():业务类型',timeout=3).after('tag=input@placeholder:请输入合同编号',timeout=3).input(businessInfo.purchase_contract,clear=True)
 
-        ele_add_customer=tab.ele('tag=h3@@text():权利人信息',timeout=3).after('tag=div@text():添加权利人')
+        
         #添加开发商信息 义务人
         ele_add_obligor=tab.ele('tag=h3@@text():义务人信息',timeout=3).after('tag=div@text():添加义务人')
         if ele_add_obligor:
@@ -359,10 +359,14 @@ async def webInputInfo(businessInfo:BusinessInfo):
             tab.ele('@placeholder:请输入联系方式',timeout=3).input(businessInfo.obligor['phone'],clear=True)
             ele_button=tab.ele('tag=span@text()=确认',timeout=3)
             ele_button.click()
+        
+        ele_add_customer=tab.ele('tag=h3@@text():权利人信息',timeout=3).after('tag=div@text():添加权利人')
     else:
         ele_add_customer=tab.ele('tag=h3@@text():抵押人信息',timeout=3).after('tag=div@@text():添加抵押人',timeout=3)
 
     if ele_add_customer:
+        ele_add_customer.wait(1)
+        
         for customer in businessInfo.customers:
             ele_add_customer.click()
             tab.ele('@placeholder:请选择证件种类',timeout=3).click()
@@ -519,26 +523,7 @@ def webSave():
 
 
 if __name__ == '__main__':
-    # tab=Chromium().latest_tab
-    # #添加抵押信息
-    # ele_loan_info=tab.ele('tag=div@@class:yw_con@@text():担保范围')
-    # ele_loan_term_start= ele_loan_info.ele('tag=label@@text():银行债务履行期限').parent().ele('tag=input@placeholder:开始日期',timeout=3)
-
-    # ele_loan_term_start.click()
-
-
-
-    business_type="合并登记"
-    customers=[{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"},{"name":"张小华","id":"362422198609242011","phone":"12345678901"}]
-    businessinfo=BusinessInfo(business_type=business_type,customers=customers)
-    businessinfo.certificate=["赣（2024）吉安市不动产证明第7019815号"]
-    businessinfo.loan_amount="1000000"
-    businessinfo.loan_tream={"start":"20240101","end":"20241201"}
-    businessinfo.loan_contract="2024000001"
-    businessinfo.loan_guarantee="全部"
-    businessinfo.img_path=r"C:\Users\Lcy\Desktop\抵质押登记"
-    print(businessinfo)
-    asyncio.run(cacheBusinessInfo(businessinfo))
-    res= asyncio.run(readBusinessInfoFromCache(businessinfo.img_path))
-    print(res)
+    tab=BROWSER.get_tab(url=URL)
+    ele_add_customer=tab.ele('tag=h3@@text():权利人信息',timeout=3).after('tag=div@text():添加权利人')
+    ele_add_customer.click()
     pass

@@ -26,8 +26,9 @@
                     {{ type }}
                   </a-option>
                 </a-select>
-                <!-- <a-button type="outline">清空业务信息</a-button> -->
+                <a-button @click="restBusiness" style="margin-top: 3px;">清空业务信息</a-button>
               </div>
+              
             </a-col>
 
             <a-col :xs="24" :md="12" :lg="16">
@@ -450,6 +451,12 @@ const handleNext = () => {
   handleReadImages();
   changeTab_emit('tab-change','3');
 };
+
+function restBusiness()
+{
+  businessConfig.reset();
+}
+
 </script>
 
 <style lang="less" scoped>
