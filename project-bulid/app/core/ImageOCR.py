@@ -16,7 +16,7 @@ class StructKey(Enum):
     IdCard=r'{"name":"识别到的姓名(如无则为null)","id":"识别到的身份证号(如无则为null)"}'
     ContractNumber=r'{"contract":"识别到的合同编号(如无则为null)"}'
     LoanAmount=r'{"loan":"识别到的贷款金额数字(纯数字,int类型,如无则为0)"}'
-    LoanTerm=r'{"start":"识别到的开始时间(格式:YYmmdd,如无则为null)","end":"识别到的结束时间(格式:YYmmdd,如无则为null)"}'
+    LoanTerm=r'{"start":"识别到的开始时间(格式:YYYYmmdd,如无则为null)","end":"识别到的结束时间(格式:YYYYmmdd,如无则为null)"}'
     RegistrationCertificate=r'{"id":"识别到的完整的抵押登记证明号(通常为"赣（*）*不动产证明第*号"或"**第*号",去除所有空格,如无则为null)"}'
     PropertyCertificate=r'{"id":"识别到的完整的房产证号(通常为"赣（*）*不动产*第*号"或"*房权证*第*号",去除所有空格,如无则为null)"}'
 

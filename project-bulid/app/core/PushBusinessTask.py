@@ -1,7 +1,7 @@
 #提交任务
 from typing import List, Optional
 from pydantic import BaseModel
-from DrissionPage import Chromium
+from DrissionPage import Chromium, ChromiumOptions
 import openpyxl,asyncio,datetime,re,yaml
 from pathlib import Path
 import win32com.client as win32
@@ -164,9 +164,9 @@ async def webSelectType(business_type:str,certificate:Optional[List[str]]=None):
     new_certificate=[]
     if certificate:
         for cert in certificate:
-           res=re.match(r".+?[(（](\d+)[)）].+?第(\d+)号",cert)
-           if res:
-            new_certificate.append([res.group(1),res.group(2)])
+            res=re.match(r".+?[(（](\d+)[)）].+?第(\d+)号",cert)
+            if res:
+                new_certificate.append([res.group(1),res.group(2)])
     #print(new_certificate)
     tab=BROWSER.get_tab(url=URL)
     BROWSER.activate_tab(tab)
@@ -347,13 +347,12 @@ async def webInputInfo(businessInfo:BusinessInfo):
     if businessInfo.business_type=="合并登记（预告抵押）":
         tab.ele('tag=h3@@text():业务类型',timeout=3).after('tag=input@placeholder:请输入合同编号',timeout=3).input(businessInfo.purchase_contract,clear=True)
 
-        
         #添加开发商信息 义务人
         ele_add_obligor=tab.ele('tag=h3@@text():义务人信息',timeout=3).after('tag=div@text():添加义务人')
         if ele_add_obligor:
             ele_add_obligor.click()
             tab.ele('@placeholder:请选择证件种类',timeout=3).click()
-            tab.eles('tag=li@@text()=统一社会信用代码@@class:el-select-dropdown__item',timeout=3)[-1].click()
+            tab.eles('tag=li@@text():统一社会信用代码@@class:el-select-dropdown__item',timeout=3)[-1].click()
             tab.ele('@placeholder:请输入姓名',timeout=3).input(businessInfo.obligor['name'],clear=True)
             tab.ele('@placeholder:请输入证件号',timeout=3).input(businessInfo.obligor['id'],clear=True)
             tab.ele('@placeholder:请输入联系方式',timeout=3).input(businessInfo.obligor['phone'],clear=True)
@@ -517,13 +516,9 @@ def webSave():
     tab=BROWSER.get_tab(url=URL)
     tab.ele('tag=span@@text():保存',timeout=3).click()
 
-# async def main(businessinfo:BusinessInfo):
-#    await asyncio.gather(webInputInfo(businessinfo),webUploadImg(businessinfo))
-
 
 
 if __name__ == '__main__':
     tab=BROWSER.get_tab(url=URL)
-    ele_add_customer=tab.ele('tag=h3@@text():权利人信息',timeout=3).after('tag=div@text():添加权利人')
-    ele_add_customer.click()
+
     pass
