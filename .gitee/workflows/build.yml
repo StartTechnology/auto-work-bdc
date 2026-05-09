@@ -1,54 +1,49 @@
-# 存放路径：你的项目根目录 → .gitee/workflows/build.yml
+# 存放路径：项目根目录/.gitee/workflows/build.yml
 name: 自动编译32位(x86)exe程序
 on:
-  # 两种触发方式：1. 推送代码自动编译 2. 手动点击编译（推荐）
-  push:
-    branches: [ main ]
-  workflow_dispatch:  # 手动触发编译（不用改代码，点一下就编译）
+  workflow_dispatch:  # 手动触发（唯一正确方式）
 
 jobs:
   build-windows-x86:
-    # Gitee云端Windows环境
-    runs-on: windows-latest
+    runs-on: windows-latest  # 云端Windows系统（编译exe必须用这个）
     defaults:
       run:
-        shell: cmd  # Windows命令行，和你本地编译一致
+        shell: cmd
     
     steps:
-      # 1. 拉取你的项目代码
       - name: 拉取项目源码
         uses: actions/checkout@v4
 
-      # 2. 安装【32位 Python3.8】（核心：必须x86才能生成32位exe）
+      # 安装32位 Python3.8
       - name: 安装 Python3.8 x86
         uses: actions/setup-python@v5
         with:
           python-version: "3.8"
-          architecture: "x86"  # 关键！指定32位
+          architecture: "x86"
 
-      # 3. 安装 uv 依赖管理器
+      # 安装uv
       - name: 安装 uv
         run: pip install uv
 
-      # 4. 使用 uv 安装项目所有依赖（无requirements.txt，适配你的项目）
-      - name: uv安装项目依赖
-        run:|
+      # 用uv安装依赖（无requirements.txt）
+      - name: uv安装依赖
+        run: |
           cd project-bulid
           uv sync
 
-      # 5. 安装 Nuitka 编译器
+      # 安装Nuitka
       - name: 安装 Nuitka
         run: pip install nuitka
 
-      # 6. 执行你的完整编译命令（1:1复刻你的命令）
-      - name: Nuitka编译32位exe
+      # 执行你的编译命令
+      - name: Nuitka 编译32位exe
         run: |
           cd project-bulid/app
           nuitka --standalone --output-dir=../dist --plugin-enable=tk-inter --show-progress --show-memory --include-data-dir=./config=config --include-data-dir=./static=static --mingw64 main.py
 
-      # 7. 上传编译好的exe文件（可直接下载）
+      # 上传exe文件
       - name: 上传编译产物
         uses: actions/upload-artifact@v4
         with:
-          name: auto-work-bdc-32位exe
-          path: dist/  # 编译输出的dist目录
+          name: auto-work-bdc-32位
+          path: dist/
