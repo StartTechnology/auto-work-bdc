@@ -1,7 +1,6 @@
 name: 编译32位Windows EXE
 on:
   workflow_dispatch:  # 手动点一下就编译
-
 jobs:
   build:
     runs-on: windows-latest  # GitHub 免费支持 Windows！核心解决问题
