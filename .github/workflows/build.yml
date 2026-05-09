@@ -28,6 +28,7 @@ jobs:
       - name: Build with Nuitka
         run: |
           cd project-bulid/app
+          set NUITKA_ACCEPT_DOWNLOAD=1
           nuitka --standalone --output-dir=../dist --plugin-enable=tk-inter --show-progress --show-memory --include-data-dir=./config=config --include-data-dir=./static=static --mingw64 --windows-dependency-tool=pefile --experimental=use_pefile_recurse main.py
 
       # ✅ 关键修复：路径改成正确的 project-bulid/dist
